@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Options>
+  <Items>
+    <Item Name="Построения">
+      <ReadOnly>Y</ReadOnly>
+    </Item>
+    <Item Name="Имя ящика">
+      <Value>Ящик</Value>
+    </Item>
+    <Item Name="Количество">
+      <Value>2</Value>
+    </Item>
+    <Item Name="Построения">
+      <ReadOnly>Y</ReadOnly>
+      <Items>
+        <Item Name="Фасад">
+          <Items>
+            <Item Name="Отступы по бокам"/>
+            <Item Name="Отступ сверху">
+              <Value>1</Value>
+            </Item>
+            <Item Name="Отступ снизу">
+              <Items>
+                <Item Name="Название"/>
+              </Items>
+              <Value>1</Value>
+            </Item>
+          </Items>
+          <Value>
+            <Name>Зеркало с фацетом 10мм</Name>
+            <Thickness>4</Thickness>
+            <Width>-1</Width>
+          </Value>
+        </Item>
+        <Item Name="Дно">
+          <Items>
+            <Item Name="B - Bd"/>
+            <Item Name="Заглубление дна в панели">
+              <ReadOnly>Y</ReadOnly>
+              <Items>
+                <Item Name="Xz"/>
+                <Item Name="Xf"/>
+                <Item Name="Ld"/>
+              </Items>
+            </Item>
+          </Items>
+          <Value>
+            <Name>ЛДСП 22мм Коимбра светлая</Name>
+            <Thickness>22</Thickness>
+            <Width>-1</Width>
+          </Value>
+        </Item>
+        <Item Name="Боковины">
+          <Items>
+            <Item Name="Кромка">
+              <Value>
+                <Name>Кромка ПВХ 22 вяз</Name>
+                <Thickness>2</Thickness>
+                <Width>-1</Width>
+                <Tape>Y</Tape>
+                <Sign>П 2 Вяз</Sign>
+                <Overhung>20</Overhung>
+              </Value>
+            </Item>
+          </Items>
+          <Value>
+            <Name>ДСП</Name>
+            <Thickness>16</Thickness>
+          </Value>
+        </Item>
+        <Item Name="Задняя панель">
+          <Items>
+            <Item Name="Материал">
+              <Value>
+                <Name>ЛДСП 22мм Коимбра светлая</Name>
+                <Thickness>22</Thickness>
+                <Width>-1</Width>
+              </Value>
+            </Item>
+            <Item Name="Крепёж">
+              <Value>
+                <Name>Саморезы\Шуруп 4,2 х 25 д/опоры стола   L  710 (Артикул 000010358)</Name>
+                <Param Class="1">
+                  <Name>Шуруп 4,2 х 25 д/опоры стола   L  710000010358</Name>
+                  <Color>$1FFFFFFF</Color>
+                  <Path>Саморезы</Path>
+                  <d1>4</d1>
+                  <d2>2</d2>
+                  <h>25</h>
+                </Param>
+              </Value>
+            </Item>
+            <Item Name="Hz"/>
+            <Item Name="B-Bz"/>
+            <Item Name="B-Bz1"/>
+          </Items>
+          <Value>Y</Value>
+        </Item>
+      </Items>
+    </Item>
+    <Item Name="Построения">
+      <ReadOnly>Y</ReadOnly>
+    </Item>
+  </Items>
+</Options>

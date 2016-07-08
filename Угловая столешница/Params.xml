@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Options>
+  <Items>
+    <Item Name="Материал">
+      <Value>
+        <Name>Зеркало 4 ммЗерк. 4</Name>
+        <Thickness>4</Thickness>
+        <Width>-1</Width>
+      </Value>
+    </Item>
+    <Item Name="Кромка">
+      <Value>
+        <Name>Полировка торцов стекла 8 мм, СДССДС полир8</Name>
+        <Thickness>2</Thickness>
+        <Width>-1</Width>
+        <Tape>Y</Tape>
+        <Sign>Полир.</Sign>
+        <Clip>1</Clip>
+        <SingleCut>Y</SingleCut>
+      </Value>
+    </Item>
+    <Item Name="Столешница">
+      <ReadOnly>Y</ReadOnly>
+    </Item>
+    <Item Name="Длина">
+      <Value>1200</Value>
+    </Item>
+    <Item Name="Ширина">
+      <Value>900</Value>
+    </Item>
+    <Item Name="Длина1">
+      <Value>400</Value>
+    </Item>
+    <Item Name="Ширина1">
+      <Value>600</Value>
+    </Item>
+    <Item Name="Радиус">
+      <Value>100</Value>
+    </Item>
+    <Item Name="Скругление углов"/>
+  </Items>
+</Options>

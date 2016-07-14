@@ -1,4 +1,4 @@
-Коллекция скриптов от Игоря Кизюна http://promebelclub.ru/forum/member.php?u=37976
+##Коллекция скриптов от Игоря Кизюна http://promebelclub.ru/forum/member.php?u=37976
 
 Для работы скриптов связанных с базой материаов необходим установленный ODBC драйвер Firebird, установленные и зарегистрированные в ОС модули FBDBDialog.dll, MSDATGRD.OCX и MSCOMCTL.OCX, а так же настройка переменных FDBServ, FDBFile и FBCFile в самом скрипте. 
 

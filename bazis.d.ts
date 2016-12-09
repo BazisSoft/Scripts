@@ -1,57 +1,59 @@
 
-declare type System = {
+declare class System {
     /**
-     * Вывести диагностическое сообщение (для отладки)
-     * @param str
+     * Вывести диагностическое сообщение (для отладки?)
+     * @param str сообщение 
      */
-    log(str);
-    /**
-     * Существует ли указанный файл?
-     * @param filename
+    log(str: string);
+    /** 
+     * Возвращает true, если файл существует
+     * @deprecated используйте fs.existsSync
+     * @param filename путь к файлу
      */
-    fileExists(filename);
+    fileExists(filename: string): Boolean;
     /**
      * Открыть диалог выбора файла
-     * @param extension
+     * @param extension расширение файла
      */
-    askFileName(extension): String;
+    askFileName(extension: string): String;
     /**
      * Записать текст в файл
-     * @param filename
-     * @param  content
+     * @deprecated используйте fs.writeFileSync
+     * @param filename путь к файлу
+     * @param  content содержимое файла
      */
-    writeTextFile(filename, content);
+    writeTextFile(filename: string, content: string);
     /**
      * Записать текст в файл с запросом имени файла
-     * @param extension
-     * @param  content
+     * @param extension Расширение файла
+     * @param  content содержимое
      */
-    askWriteTextFile(extension, content);
+    askWriteTextFile(extension: string, content: string);
     /**
      * Считать текст из файла
-     * @param filename
+     * @param filename Имя файла
      */
-    readTextFile(filename): String;
+    readTextFile(filename: string): String;
     /**
      * Считать текст из файла с запросом выбора файла
-     * @param extension
+     * @param extension Расширение файла
      */
-    askReadTextFile(extension): String;
+    askReadTextFile(extension: string): String;
     /**
      * Выполнить зашифрованный код
-     * @param str
+     * @param str код скрипта
      */
-    secureExec(str);
+    secureExec(str: string);
     /**
      * Выполнить внешнюю программу
-     * @param str
+     * @param str код программы
      */
-    exec(str): Boolean;
+    exec(str: string): Boolean;
     /**
-     * Задерживает выполнение программы на указанное время (в милисекундах)
-     * @param ms
+     * Задерживает выполнение программы на указанное время
+     * @param ms время (в миллисекундах)
      */
-    sleep(ms);
+    sleep(ms: number);
     /**
      * Текущая версия Bazis API
      */
@@ -59,7 +61,7 @@ declare type System = {
 
 }
 
-declare type IDispatch = {
+declare class IDispatch {
     /**
      * Информациях о методах и свойствах объекта
      */
@@ -67,7 +69,7 @@ declare type IDispatch = {
 
 }
 
-declare type Model3D = {
+declare class Model3D extends List3D {
     /**
      * Размер модели
      */
@@ -83,7 +85,7 @@ declare type Model3D = {
     /**
      * Выделенный объект модели
      */
-    Selected: Object3;
+    Selected: Object3; 
     /**
      * Количество выделенных элементов
      */
@@ -103,7 +105,7 @@ declare type Model3D = {
 
 }
 
-declare type Action3D = {
+declare class Action3D{
     /**
      * Если someBool, то запрещены любые функции взаимодействия с пользователем
      */
@@ -126,9 +128,9 @@ declare type Action3D = {
     Cancel();
     /**
      * Выполнить функцию, в которой доступны запросы Get*
-     * @param func
+     * @param func функция для выполнения
      */
-    AsyncExec(func);
+    AsyncExec(func: Function);
     /**
      * Позиция курсора
      */
@@ -175,9 +177,9 @@ declare type Action3D = {
     BlinkHint: String;
     /**
      * Включить режим Орто относительно точки
-     * @param pos
+     * @param pos Координаты точки
      */
-    BeginOrtho3(pos);
+    BeginOrtho3(pos: Vector);
     /**
      * Отключить режим Орто
      */
@@ -237,7 +239,7 @@ declare type Action3D = {
 
 }
 
-declare type ScriptMenu = {
+declare class ScriptMenu{
     /**
      * Имя свойства
      */
@@ -264,43 +266,43 @@ declare type ScriptMenu = {
     Store: Boolean;
     /**
      * Сохранить введенные пользователем данные в файле xml
-     * @param filename
+     * @param filename 
      */
-    Save(filename);
+    Save(filename: string);
     /**
      * Загрузить значения полей из файла xml
      * @param filename
      */
-    Load(filename): Boolean;
+    Load(filename: string): Boolean;
     /**
      * Создать вложенную группу свойств
-     * @param caption
+     * @param caption Название группы
      */
-    NewGroup(caption): ScriptGroupProperty;
+    NewGroup(caption: string): ScriptGroupProperty;
     /**
      * Создать строковое свойство
-     * @param caption
+     * @param caption Название свойства
      */
-    NewString(caption): ScriptStringProperty;
+    NewString(caption: string): ScriptStringProperty;
     /**
      * Создать свойство вида Да/Нет
-     * @param caption
+     * @param caption Название свойства
      */
-    NewBool(caption): ScriptBooleanProperty;
+    NewBool(caption: string): ScriptBooleanProperty;
     /**
      * Создать числовое свойство
-     * @param caption
+     * @param caption Название свойства
      */
-    NewNumber(caption): ScriptNumberProperty;
+    NewNumber(caption: string): ScriptNumberProperty;
     /**
      * Создать кнопку
-     * @param caption
+     * @param caption Название свойства
      */
-    NewButton(caption): ScriptButtonProperty;
+    NewButton(caption: string): ScriptButtonProperty;
 
 }
 
-declare type PropertyLayout = {
+declare class PropertyLayout{
     /**
      * Левая граница
      */
@@ -328,7 +330,7 @@ declare type PropertyLayout = {
 
 }
 
-declare type ScriptProperty = {
+declare class ScriptProperty{
     /**
      * Имя свойства
      */
@@ -397,12 +399,12 @@ declare type ScriptProperty = {
      * Сохранить введенные пользователем данные в файле xml
      * @param filename
      */
-    Save(filename);
+    Save(filename: string);
     /**
      * Загрузить значения полей из файла xml
      * @param filename
      */
-    Load(filename): Boolean;
+    Load(filename: string): Boolean;
     /**
      * Проверка корректности значения
      */
@@ -421,12 +423,12 @@ declare type ScriptProperty = {
     Layout: PropertyLayout;
     /**
      * Задать расположение свойства на форме
-     * @param  L
-     * @param  T
-     * @param  W
-     * @param  H
+     * @param  L Отступ от левого края родительского объекта
+     * @param  T Отступ от верхнего края родительского объекта
+     * @param  W Ширина 
+     * @param  H Высота 
      */
-    SetLayout(L, T, W, H);
+    SetLayout(L: number, T: number, W: number, H: number);
     /**
      * Задать выравнивание компонента
      */
@@ -436,88 +438,88 @@ declare type ScriptProperty = {
      */
     AlignWithMargins: Boolean;
     /**
-     * Отступы между компонентами
-     * @param  L
-     * @param  R
-     * @param  T
-     * @param  B
+     * Отступы между компонентами 
+     * @param  L Отступ слева
+     * @param  R Отступ справа
+     * @param  T Отступ сверху
+     * @param  B Отступ снизу
      */
-    SetMargins(L, R, T, B);
+    SetMargins(L: number, R: number, T: number, B: number);
     /**
      * Выравнивание текста в надписи
      */
     Alignment: AlignmentType;
     /**
      * Создать вложенную группу свойств
-     * @param caption
+     * @param caption Название группы
      */
-    NewGroup(caption): ScriptGroupProperty;
+    NewGroup(caption: string): ScriptGroupProperty;
     /**
      * Создать вложенную группу свойств c рисунком
-     * @param caption
-     * @param imagefile
+     * @param caption Название свойства
+     * @param imagefile путь к файлу с рисунком
      */
-    NewImage(caption, imagefile): ScriptGroupProperty;
+    NewImage(caption: string, imagefile: string): ScriptGroupProperty;
     /**
      * Создать строковое свойство
-     * @param caption
+     * @param caption Название свойства
      */
-    NewString(caption): ScriptStringProperty;
+    NewString(caption: string): ScriptStringProperty;
     /**
      * Создать свойство вида Да/Нет
-     * @param caption
+     * @param caption Название свойства
      */
-    NewBool(caption): ScriptBooleanProperty;
+    NewBool(caption: string): ScriptBooleanProperty;
     /**
      * Создать числовое свойство
-     * @param caption
+     * @param caption Название свойства
      */
-    NewNumber(caption): ScriptNumberProperty;
+    NewNumber(caption: string): ScriptNumberProperty;
     /**
      * Создать кнопку
-     * @param caption
+     * @param caption Название свойства
      */
-    NewButton(caption): ScriptButtonProperty;
+    NewButton(caption: string): ScriptButtonProperty;
     /**
      * Создать свойство с кнопкой редактирования
-     * @param caption
+     * @param caption Название свойства
      */
-    NewSelector(caption): ScriptSelectorProperty;
+    NewSelector(caption: string): ScriptSelectorProperty;
     /**
      * Создать свойство - выпадающий список
-     * @param caption
-     * @param  Item1
+     * @param caption Название свойства
+     * @param  Item1 Первый элемент списка
      */
-    NewCombo(caption, Item1): ScriptComboProperty;
+    NewCombo(caption: string, Item1?: string): ScriptComboProperty;
     /**
      * Создать свойство типа материал
-     * @param caption
+     * @param caption Название свойства
      */
-    NewMaterial(caption): ScriptMaterialProperty;
+    NewMaterial(caption: string): ScriptMaterialProperty;
     /**
      * Создать свойство типа материал
-     * @param caption
+     * @param caption Название свойства
      */
-    NewButt(caption): ScriptButtProperty;
+    NewButt(caption: string): ScriptButtProperty;
     /**
      * Создать свойство типа материал
-     * @param caption
+     * @param caption Название свойства
      */
-    NewFurniture(caption): ScriptFurnitureProperty;
+    NewFurniture(caption: string): ScriptFurnitureProperty;
     /**
      * Создать свойство типа цвет
-     * @param caption
+     * @param caption Название свойства
      */
-    NewColor(caption): ScriptColorProperty;
+    NewColor(caption: string): ScriptColorProperty;
     /**
      * Создать разделитель
      */
     NewSeparator: ScriptProperty;
     /**
      * Создать надпись
-     * @param caption
+     * @param caption Название свойства
      */
-    NewLabel(caption): ScriptProperty;
+    NewLabel(caption: string): ScriptProperty;
     /**
      * Всплывающее меню
      */
@@ -690,18 +692,18 @@ declare enum SectionMountType {
 
 }
 
-declare type FurnitureScheme = {
+declare class FurnitureScheme{
     /**
      * Установка крепежа в стык 2-х панелей
      * @param panel1
      * @param panel2
      */
-    Mount(panel1, panel2);
+    Mount(panel1: Panel, panel2: Panel);
     /**
      * Задать количество крепежа для схемы
      * @param count
      */
-    SetFurnitureCount(count);
+    SetFurnitureCount(count: number);
     /**
      * Название схемы
      */
@@ -753,57 +755,57 @@ declare type FurnitureScheme = {
 
 }
 
-declare type FurnitureSchemes = {
+declare class FurnitureSchemes{
     /**
      * Сохранить список схем в файл
      * @param filename
      */
-    SaveTo(filename);
+    SaveTo(filename: string);
     /**
      * Добавить список схем из файла
      * @param filename
      */
-    AddFromFile(filename);
+    AddFromFile(filename: string);
     /**
      * Найти схему по имени
      * @param SchemeName
      */
-    GetScheme(SchemeName): FurnitureScheme;
+    GetScheme(SchemeName: string): FurnitureScheme;
     /**
      * Получить номер схемы в списке
      * @param Scheme
      */
-    IndexOf(Scheme): Number;
+    IndexOf(Scheme: FurnitureScheme): Number;
     /**
-     * Присутствие схемы в списке
+     * Наличие схемы в списке
      * @param Scheme
      */
-    Exists(Scheme): Boolean;
+    Exists(Scheme: FurnitureScheme): Boolean;
     /**
      * Добавить схему в список
      * @param  FurnScheme
      */
-    AddScheme(FurnScheme);
+    AddScheme(FurnScheme: FurnitureScheme);
     /**
      * Удалить схему по имени
      * @param SchemeName
      */
-    DeleteScheme(SchemeName);
+    DeleteScheme(SchemeName: string);
     /**
      * Удалить схему по номеру
      * @param  index
      */
-    DeleteIndex(index);
+    DeleteIndex(index: number);
     /**
      * Принять изменения в схеме
      * @param Scheme
      */
-    AcceptScheme(Scheme);
+    AcceptScheme(Scheme: FurnitureScheme);
     /**
      * Создать новую схему
      * @param SchemeName
      */
-    NewScheme(SchemeName): FurnitureScheme;
+    NewScheme(SchemeName: string): FurnitureScheme;
     /**
      * Список схем
      */
@@ -815,13 +817,13 @@ declare type FurnitureSchemes = {
 
 }
 
-declare type SectionScheme = {
+declare class SectionScheme{
     /**
      * Установить секцию
-     * @param size
-     * @param  position
+     * @param size Размер секции
+     * @param  position Позиция секции
      */
-    Mount(size, position);
+    Mount(size: Vector, position: Vector);
     /**
      * Имя секции
      */
@@ -842,7 +844,7 @@ declare type SectionScheme = {
      * Задать количество основных элементов в секции
      * @param  count
      */
-    SetElemCount(count);
+    SetElemCount(count: number);
     /**
      * Тип монтирования
      */
@@ -910,7 +912,7 @@ declare enum ErrorType {
 
 }
 
-declare type InspectorError = {
+declare class InspectorError{
     /**
      * Тип ошибки
      */
@@ -934,7 +936,7 @@ declare type InspectorError = {
 
 }
 
-declare type InspectorOptions = {
+declare class InspectorOptions{
     /**
      * Проверка пересечения объектов
      */
@@ -970,12 +972,12 @@ declare type InspectorOptions = {
 
 }
 
-declare type ModelInspector = {
+declare class ModelInspector{
     /**
      * Проверить модель
      * @param Model
      */
-    Run(Model);
+    Run(Model: Model3D);
     /**
      * Список ошибок
      */
@@ -987,7 +989,7 @@ declare type ModelInspector = {
 
 }
 
-declare type ScriptForm = {
+declare class ScriptForm{
     /**
      * Набор редактируемых свойств
      */
@@ -996,7 +998,7 @@ declare type ScriptForm = {
      * Показать форму
      * @param WindowPos
      */
-    Show(WindowPos);
+    Show(WindowPos: WindowPosition);
     /**
      * Показать модальную форму
      */
@@ -1056,7 +1058,7 @@ declare type ScriptForm = {
     /**
      * Закрыть форму
      */
-    Close;
+    Close();
     /**
      * Обработчик открытия формы
      */
@@ -1080,30 +1082,26 @@ declare type ScriptForm = {
 
 }
 
-declare type ScriptParamFastenerDB = {
+declare class ScriptParamFastenerDB{
     /**
      * Загрузить базу из файла
      * @param  filename
      */
-    LoadFromFile(filename): String;
+    LoadFromFile(filename: string): String;
     /**
      * Добавить базу из файла
      * @param  filename
      */
-    AddFromFile(filename): String;
+    AddFromFile(filename: string): String;
     /**
      * Сохранить базу в файл
      * @param  filename
      */
-    SaveToFile(filename): String;
+    SaveToFile(filename: string): String;
 
 }
 
-declare type ScriptGroupProperty = {
-    /**
-     * 
-     */
-    $$proto: ScriptProperty;
+declare class ScriptGroupProperty extends ScriptProperty {
     /**
      * 
      */
@@ -1115,11 +1113,7 @@ declare type ScriptGroupProperty = {
 
 }
 
-declare type ScriptStringProperty = {
-    /**
-     * 
-     */
-    $$proto: ScriptProperty;
+declare class ScriptStringProperty extends ScriptProperty{
     /**
      * 
      */
@@ -1127,11 +1121,7 @@ declare type ScriptStringProperty = {
 
 }
 
-declare type ScriptBooleanProperty = {
-    /**
-     * 
-     */
-    $$proto: ScriptProperty;
+declare class ScriptBooleanProperty extends ScriptProperty{
     /**
      * 
      */
@@ -1139,11 +1129,7 @@ declare type ScriptBooleanProperty = {
 
 }
 
-declare type ScriptNumberProperty = {
-    /**
-     * 
-     */
-    $$proto: ScriptProperty;
+declare class ScriptNumberProperty extends ScriptProperty{
     /**
      * 
      */
@@ -1163,11 +1149,7 @@ declare type ScriptNumberProperty = {
 
 }
 
-declare type ScriptButtonProperty = {
-    /**
-     * 
-     */
-    $$proto: ScriptProperty;
+declare class ScriptButtonProperty extends ScriptProperty{
     /**
      * Обработчик нажатия на кнопку
      */
@@ -1175,11 +1157,7 @@ declare type ScriptButtonProperty = {
 
 }
 
-declare type ScriptSelectorProperty = {
-    /**
-     * 
-     */
-    $$proto: ScriptProperty;
+declare class ScriptSelectorProperty extends ScriptProperty{
     /**
      * 
      */
@@ -1191,11 +1169,7 @@ declare type ScriptSelectorProperty = {
 
 }
 
-declare type ScriptComboProperty = {
-    /**
-     * 
-     */
-    $$proto: ScriptProperty;
+declare class ScriptComboProperty extends ScriptProperty{
     /**
      * 
      */
@@ -1204,7 +1178,7 @@ declare type ScriptComboProperty = {
      * Добавить элемент в список
      * @param item
      */
-    AddItem(item);
+    AddItem(item: string);
     /**
      * 
      */
@@ -1212,11 +1186,7 @@ declare type ScriptComboProperty = {
 
 }
 
-declare type ScriptMaterialProperty = {
-    /**
-     * 
-     */
-    $$proto: ScriptProperty;
+declare class ScriptMaterialProperty extends ScriptProperty{
     /**
      * 
      */
@@ -1232,11 +1202,7 @@ declare type ScriptMaterialProperty = {
 
 }
 
-declare type ScriptButtProperty = {
-    /**
-     * 
-     */
-    $$proto: ScriptProperty;
+declare class ScriptButtProperty extends ScriptProperty{
     /**
      * Толщина кромки
      */
@@ -1252,11 +1218,7 @@ declare type ScriptButtProperty = {
 
 }
 
-declare type ScriptFurnitureProperty = {
-    /**
-     * 
-     */
-    $$proto: ScriptProperty;
+declare class ScriptFurnitureProperty extends ScriptProperty{
     /**
      * 
      */
@@ -1264,11 +1226,7 @@ declare type ScriptFurnitureProperty = {
 
 }
 
-declare type ScriptColorProperty = {
-    /**
-     * 
-     */
-    $$proto: ScriptProperty;
+declare class ScriptColorProperty extends ScriptProperty{
     /**
      * 
      */
@@ -1276,21 +1234,21 @@ declare type ScriptColorProperty = {
 
 }
 
-declare type Undo3D = {
+declare class Undo3D{
     /**
      * 
      * @param obj
      */
-    Changing(obj);
+    Changing(obj: Object3);
     /**
      * 
      * @param obj
      */
-    RecursiveChanging(obj);
+    RecursiveChanging(obj: Object3);
 
 }
 
-declare type FurnMaterial = {
+declare class FurnMaterial{
     /**
      * 
      */
@@ -1308,11 +1266,11 @@ declare type FurnMaterial = {
      * @param name
      * @param thick
      */
-    Make(name, thick);
+    Make(name: string, thick: number);
 
 }
 
-declare type Vector = {
+declare class Vector{
     /**
      * 
      */
@@ -1328,7 +1286,7 @@ declare type Vector = {
 
 }
 
-declare type Point = {
+declare class Point{
     /**
      * 
      */
@@ -1340,7 +1298,7 @@ declare type Point = {
 
 }
 
-declare type Edge3 = {
+declare class Edge3{
     /**
      * Начало ребра в ЛСК
      */
@@ -1360,11 +1318,7 @@ declare type Edge3 = {
 
 }
 
-declare type Object3 = {
-    /**
-     * 
-     */
-    $$proto: Object;
+declare class Object3 extends Object{
     /**
      * Наименование
      */
@@ -1423,73 +1377,73 @@ declare type Object3 = {
     SetDefaultTransform();
     /**
      * Сместить объект
-     * @param dir
+     * @param dir Вектор смещения
      */
-    Translate(dir);
+    Translate(dir: Vector);
     /**
      * Повернуть вокруг заданной оси
-     * @param axis
-     * @param angle
+     * @param axis 
+     * @param angle Угол (в градусах)
      */
-    Rotate(axis, angle);
+    Rotate(axis: Vector, angle: number);
     /**
      * 
-     * @param dir
+     * @param dir Вектор смещения
      */
-    TranslateGCS(dir);
+    TranslateGCS(dir: Vector);
     /**
      * 
      * @param axis
-     * @param angle
+     * @param angle Угол (в градусах)
      */
-    RotateGCS(axis, angle);
+    RotateGCS(axis: Vector, angle: number);
     /**
      * Повернуть вокруг оси X
-     * @param angle
+     * @param angle Угол (в градусах)
      */
-    RotateX(angle);
+    RotateX(angle: number);
     /**
      * Повернуть вокруг оси Y
-     * @param angle
+     * @param angle Угол (в градусах)
      */
-    RotateY(angle);
+    RotateY(angle: number);
     /**
      * Повернуть вокруг оси Z
-     * @param angle
+     * @param angle Угол (в градусах)
      */
-    RotateZ(angle);
+    RotateZ(angle: number);
     /**
      * Развернуть объект вдоль осей
      * @param axisz
      * @param axisy
      */
-    Orient(axisz, axisy);
+    Orient(axisz: Vector, axisy: Vector);
     /**
      * 
      * @param axisz
      * @param axisy
      */
-    OrientGCS(axisz, axisy);
+    OrientGCS(axisz: Vector, axisy: Vector);
     /**
      * Преобразовать точку в ЛСК объекта
      * @param pos
      */
-    ToObject(pos): Vector;
+    ToObject(pos: Vector): Vector;
     /**
      * Преобразовать точку из ЛСК объекта
      * @param pos
      */
-    ToGlobal(pos): Vector;
+    ToGlobal(pos: Vector): Vector;
     /**
      * Преобразовать нормаль в ЛСК объекта
      * @param dir
      */
-    NToObject(dir): Vector;
+    NToObject(dir: Vector): Vector;
     /**
      * Преобразовать нормаль из ЛСК объекта
      * @param dir
      */
-    NToGlobal(dir): Vector;
+    NToGlobal(dir: Vector): Vector;
     /**
      * Локальные размеры объекта
      */
@@ -1514,7 +1468,7 @@ declare type Object3 = {
      * Получить список общего крепежа на двух панелях
      * @param Obj
      */
-    FindConnectedFasteners(Obj): Array<Object3>;
+    FindConnectedFasteners(Obj: Object3): Array<Object3>;
     /**
      * Количество пользовательских свойств
      */
@@ -1534,11 +1488,7 @@ declare type Object3 = {
 
 }
 
-declare type List3D = {
-    /**
-     * 
-     */
-    $$proto: Object3;
+declare class List3D extends Object3{
     /**
      * Количество объектов в структуре
      */
@@ -1551,7 +1501,7 @@ declare type List3D = {
      * Найти объект по имени
      * @param name
      */
-    Find(name): Object3;
+    Find(name: string): Object3;
     /**
      * Являетсяли объект эластичным
      */
@@ -1560,20 +1510,16 @@ declare type List3D = {
      * Растянуть объект до требуемых размеров
      * @param newSize
      */
-    ElasticResize(newSize): Vector;
+    ElasticResize(newSize: Vector): Vector;
     /**
      * Загрузить объекты из файлов *.b3d,*.f3d
      * @param file
      */
-    Load(file): Boolean;
+    Load(file: string): Boolean;
 
 }
 
-declare type Panel = {
-    /**
-     * 
-     */
-    $$proto: Object3;
+declare class Panel extends Object3{
     /**
      * Контур панели
      */
@@ -1616,10 +1562,10 @@ declare type Panel = {
     Cuts: PanelCuts;
     /**
      * Закрыта ли кромка другими панелями? Указывается индекс кромки и расстояние до панелей.
-     * @param index
-     * @param distance
+     * @param index индекс кромки
+     * @param distance расстояние до панелей
      */
-    IsButtVisible(index, distance): Boolean;
+    IsButtVisible(index: number, distance: number): Boolean;
     /**
      * Является ли контур прямоугольным?
      */
@@ -1627,28 +1573,24 @@ declare type Panel = {
     /**
      * Накатать кромку на элемент
      * @param material
-     * @param elem
+     * @param elem 
      */
     AddButt(material, elem): PanelButt;
     /**
      * Наклеить пластик на панель
      * @param material
-     * @param someBoolean
+     * @param Front На лицевую пласть панели
      */
-    AddPlastic(material, someBoolean): PanelPlastic;
+    AddPlastic(material: InMaterial, Front: boolean): PanelPlastic;
     /**
      * Создать новый паз
      * @param name
      */
-    AddCut(name): PanelCut;
+    AddCut(name: string): PanelCut;
 
 }
 
-declare type Extrusion = {
-    /**
-     * 
-     */
-    $$proto: Object3;
+declare class Extrusion extends Object3{
     /**
      * Контур профиля
      */
@@ -1670,15 +1612,11 @@ declare type Extrusion = {
      * @param pos
      * @param normal
      */
-    Clip(pos, normal);
+    Clip(pos: Vector, normal: Vector);
 
 }
 
-declare type Trajectory = {
-    /**
-     * 
-     */
-    $$proto: Object3;
+declare class Trajectory extends Object3{
     /**
      * 
      */
@@ -1698,11 +1636,7 @@ declare type Trajectory = {
 
 }
 
-declare type Block = {
-    /**
-     * 
-     */
-    $$proto: List3D;
+declare class Block extends List3D{
     /**
      * 
      */
@@ -1714,11 +1648,7 @@ declare type Block = {
 
 }
 
-declare type Assembly = {
-    /**
-     * 
-     */
-    $$proto: List3D;
+declare class Assembly extends List3D{
     /**
      * 
      */
@@ -1726,11 +1656,7 @@ declare type Assembly = {
 
 }
 
-declare type Contour3D = {
-    /**
-     * 
-     */
-    $$proto: Object3;
+declare class Contour3D extends Object3{
     /**
      * Элементы вспомогательного контура
      */
@@ -1738,11 +1664,7 @@ declare type Contour3D = {
 
 }
 
-declare type Size3D = {
-    /**
-     * 
-     */
-    $$proto: Object3;
+declare class Size3D extends Object3{
     /**
      * Перестроить по точкам
      * @param Pos1
@@ -1832,7 +1754,7 @@ declare enum TextureOrientation {
 
 }
 
-declare type PanelButts = {
+declare class PanelButts{
     /**
      * 
      */
@@ -1848,7 +1770,7 @@ declare type PanelButts = {
 
 }
 
-declare type PanelButt = {
+declare class PanelButt{
     /**
      * 
      */
@@ -1868,7 +1790,7 @@ declare type PanelButt = {
 
 }
 
-declare type PanelPlastics = {
+declare class PanelPlastics{
     /**
      * 
      */
@@ -1884,7 +1806,7 @@ declare type PanelPlastics = {
 
 }
 
-declare type PanelPlastic = {
+declare class PanelPlastic{
     /**
      * 
      */
@@ -1900,7 +1822,7 @@ declare type PanelPlastic = {
 
 }
 
-declare type PanelCuts = {
+declare class PanelCuts{
     /**
      * 
      */
@@ -1916,7 +1838,7 @@ declare type PanelCuts = {
 
 }
 
-declare type PanelCut = {
+declare class PanelCut{
     /**
      * 
      */
@@ -1936,7 +1858,7 @@ declare type PanelCut = {
 
 }
 
-declare type Contour2D = {
+declare class Contour2D{
     /**
      * Количество элементов контура
      */
@@ -1966,14 +1888,14 @@ declare type Contour2D = {
      * @param dx
      * @param dy
      */
-    Move(dx, dy);
+    Move(dx: number, dy: number);
     /**
      * Повернуть вокруг точки
      * @param x
      * @param y
-     * @param angle
+     * @param angle Угол (в градусах)
      */
-    Rotate(x, y, angle);
+    Rotate(x: number, y: number, angle: number);
     /**
      * Добавить прямоугольник
      * @param x1
@@ -1981,7 +1903,7 @@ declare type Contour2D = {
      * @param x2
      * @param y2
      */
-    AddRectangle(x1, y1, x2, y2);
+    AddRectangle(x1: number, y1: number, x2: number, y2: number);
     /**
      * Добавить прямоугольник со скурглёнными краями
      * @param x1
@@ -1990,7 +1912,7 @@ declare type Contour2D = {
      * @param y2
      * @param rad
      */
-    AddRoundRect(x1, y1, x2, y2, rad);
+    AddRoundRect(x1: number, y1: number, x2: number, y2: number, rad: number);
     /**
      * Добавить линию
      * @param x1
@@ -1998,47 +1920,48 @@ declare type Contour2D = {
      * @param x2
      * @param y2
      */
-    AddLine(x1, y1, x2, y2): Object;
+    AddLine(x1: number, y1: number, x2: number, y2: number): Object;
     /**
      * Добавить окружность
      * @param xc
      * @param yc
      * @param rad
      */
-    AddCircle(xc, yc, rad): Object;
+    AddCircle(xc: number, yc: number, rad: number): Object;
     /**
      * Добавить дугу по началу, концу и центру
      * @param p1
      * @param p2
      * @param centre
-     * @param someBoolean
+     * @param orient Ориентация против часовой стрелки
      */
-    AddArc(p1, p2, centre, someBoolean): Object;
+    AddArc(p1: Point, p2: Point, centre: Point, orient: boolean): Object;
     /**
      * Добавить дугу по 3 точкам
      * @param p1
      * @param p2
      * @param p3
      */
-    AddArc3(p1, p2, p3): Object;
+    AddArc3(p1: Point, p2: Point, p3: Point): Object;
     /**
      * Добавить эквидистанту контура. Последние 2 параметры отвечают за направление и скругление
-     * @param contour
+     * @param contour 
      * @param offset
-     * @param someBool
-     * @param someBool2
+     * @param Side
+     * @param Rounding
+     * @param Pos 
      */
-    AddEquidistant(contour, offset, someBool, someBool2);
+    AddEquidistant(contour: Contour2D, offset: number, Side: boolean, Rounding: boolean, Pos?: Point);
     /**
      * Вычесть замкнутый контур
      * @param contour
      */
-    Subtraction(contour);
+    Subtraction(contour: Contour2D);
     /**
      * Сложить с замкнутым контуром
      * @param contour
      */
-    Addition(contour);
+    Addition(contour: Contour2D);
     /**
      * Скругление элементов
      * @param elem1
@@ -2047,7 +1970,7 @@ declare type Contour2D = {
      * @param y
      * @param radius
      */
-    RoundingEx(elem1, elem2, x, y, radius): Object;
+    RoundingEx(elem1, elem2, x: number, y: number, radius): Object;
     /**
      * Фаска на 2 элементах
      * @param elem1
@@ -2055,27 +1978,27 @@ declare type Contour2D = {
      * @param l1
      * @param l2
      */
-    FacetEx(elem1, elem2, l1, l2): Object;
+    FacetEx(elem1, elem2, l1: number, l2?:number): Object;
     /**
      * Скругление в указанной точке
      * @param x
      * @param y
      * @param radius
      */
-    Rounding(x, y, radius): Object;
+    Rounding(x: number, y: number, radius: number): Object;
     /**
      * Фаска в указанной точке
      * @param x
      * @param y
      * @param l
      */
-    Facet(x, y, l): Object;
+    Facet(x: number, y: number, l: number): Object;
     /**
      * Найти ближайший элемент по координатам
      * @param x
      * @param y
      */
-    Find(x, y): Object;
+    Find(x: number, y: number): Object;
     /**
      * Вписать весь контур в заданные габариты
      * @param x1
@@ -2083,7 +2006,7 @@ declare type Contour2D = {
      * @param x2
      * @param y2
      */
-    Fit(x1, y1, x2, y2);
+    Fit(x1: number, y1: number, x2: number, y2: number);
     /**
      * Растянуть контур резиновой нитью
      * @param x1
@@ -2093,32 +2016,32 @@ declare type Contour2D = {
      * @param dx
      * @param dy
      */
-    Elastic(x1, y1, x2, y2, dx, dy);
+    Elastic(x1: number, y1: number, x2: number, y2: number, dx: number, dy: number);
     /**
      * Отразить контур относительно линии
      * @param x1
      * @param y1
      * @param x2
      * @param y2
-     * @param someBoolean
+     * @param Copy
      */
-    Symmetry(x1, y1, x2, y2, someBoolean);
+    Symmetry(x1: number, y1: number, x2: number, y2: number, Copy: boolean);
     /**
      * Загрузить контур из файла *.frw
      * @param file
      */
-    Load(file): Boolean;
+    Load(file: string): Boolean;
     /**
      * Находится ли точка внутри контура?
      * @param x
      * @param y
      */
-    IsPointInside(x, y): Boolean;
+    IsPointInside(x: number, y: number): Boolean;
     /**
      * Находится ли контур внутри другого?
      * @param contour
      */
-    IsInContour(contour): Boolean;
+    IsInContour(contour: Contour2D): Boolean;
     /**
      * Является ли контур замкнутым?
      */
@@ -2135,7 +2058,7 @@ declare type Contour2D = {
 
 }
 
-declare type Geometry2D = {
+declare class Geometry2D{
     /**
      * Вычислить точки пересечения двухмерных элементов
      * @param elem1
@@ -2158,11 +2081,11 @@ declare type Geometry2D = {
      * Найти площадь контура
      * @param contour
      */
-    Area(contour): Number;
+    Area(contour: Contour2D): Number;
 
 }
 
-declare type InControl = {
+declare class InControl{
     /**
      * 
      */
@@ -2186,16 +2109,12 @@ declare type InControl = {
 
 }
 
-declare type InButton = {
-    /**
-     * 
-     */
-    $$proto: InControl;
+declare class InButton extends InControl{
     /**
      * Создать подменю
      * @param caption
      */
-    NewSubMenu(caption): InButton;
+    NewSubMenu(caption: string): InButton;
     /**
      * 
      */
@@ -2203,11 +2122,7 @@ declare type InButton = {
 
 }
 
-declare type InFloat = {
-    /**
-     * 
-     */
-    $$proto: InControl;
+declare class InFloat extends InControl{
     /**
      * 
      */
@@ -2223,11 +2138,7 @@ declare type InFloat = {
 
 }
 
-declare type InNumber = {
-    /**
-     * 
-     */
-    $$proto: InControl;
+declare class InNumber extends InControl{
     /**
      * 
      */
@@ -2243,11 +2154,7 @@ declare type InNumber = {
 
 }
 
-declare type InMaterial = {
-    /**
-     * 
-     */
-    $$proto: InControl;
+declare class InMaterial extends InControl{
     /**
      * 
      */
@@ -2266,17 +2173,13 @@ declare type InMaterial = {
     SetActive();
     /**
      * Применить материал к указанному объекту
-     * @param Object3
+     * @param obj
      */
-    Apply(Object3);
+    Apply(obj: Object3);
 
 }
 
-declare type InButtMaterial = {
-    /**
-     * 
-     */
-    $$proto: InControl;
+declare class InButtMaterial extends InControl{
     /**
      * 
      */
@@ -2308,11 +2211,7 @@ declare type InButtMaterial = {
 
 }
 
-declare type InFurniture = {
-    /**
-     * 
-     */
-    $$proto: InControl;
+declare class InFurniture extends InControl{
     /**
      * Установить крепеж между двух панелей
      * @param panel1
@@ -2321,20 +2220,20 @@ declare type InFurniture = {
      * @param y
      * @param z
      */
-    Mount(panel1, panel2, x, y, z): Object3;
+    Mount(panel1: Panel, panel2: Panel, x: number, y: number, z: number): Object3;
     /**
      * Установить крепеж на плоскость панели
      * @param panel
      * @param x
      * @param y
      * @param z
-     * @param angle
+     * @param angle Угол (в градусах)
      */
-    Mount1(panel, x, y, z, angle): Object3;
+    Mount1(panel: Panel, x: number, y: number, z: number, angle: number): Object3;
 
 }
 
-declare type InfFurniture = {
+declare class InfFurniture{
     /**
      * Установить крепеж между двух панелей
      * @param panel1
@@ -2343,20 +2242,20 @@ declare type InfFurniture = {
      * @param y
      * @param z
      */
-    Mount(panel1, panel2, x, y, z): Object3;
+    Mount(panel1: Panel, panel2: Panel, x: number, y: number, z: number): Object3;
     /**
      * Установить крепеж на плоскость панели
      * @param panel
      * @param x
      * @param y
      * @param z
-     * @param angle
+     * @param angle Угол (В градусах)
      */
-    Mount1(panel, x, y, z, angle): Object3;
+    Mount1(panel: Panel, x: number, y: number, z: number, angle: number): Object3;
 
 }
 
-declare type DoorsMaker = {
+declare class DoorsMaker{
     /**
      * 
      */
@@ -2369,12 +2268,12 @@ declare type DoorsMaker = {
      * Сохранить параметры установки дверей в файл
      * @param filename
      */
-    Save(filename);
+    Save(filename: string);
     /**
      * Загрузить параметры установки дверей из файла
      * @param filename
      */
-    Load(filename): Boolean;
+    Load(filename: string): Boolean;
     /**
      * Установить двери в секцию (Объект - Panel или Edge)
      * @param LeftObject
@@ -2382,11 +2281,11 @@ declare type DoorsMaker = {
      * @param TopObject
      * @param BottomObject
      */
-    Setup(LeftObject, RightObject, TopObject, BottomObject);
+    Setup(LeftObject: Panel | Edge3, RightObject: Panel | Edge3, TopObject: Panel | Edge3, BottomObject: Panel | Edge3);
 
 }
 
-declare type BoxesMaker = {
+declare class BoxesMaker{
     /**
      * 
      */
@@ -2395,24 +2294,24 @@ declare type BoxesMaker = {
      * Сохранить параметры установки ящиков в файл
      * @param filename
      */
-    Save(filename);
+    Save(filename: string);
     /**
      * Загрузить параметры установки ящиков из файла
      * @param filename
      */
-    Load(filename): Boolean;
+    Load(filename: string): Boolean;
     /**
      * Установить ящик в секцию. LeftObject, RightObject - панели. TopObject, BottomObject - Panel или Edge
-     * @param LeftObject
-     * @param RightObject
-     * @param TopObject
-     * @param BottomObject
+     * @param LeftObject Левая панель
+     * @param RightObject Правая панель
+     * @param TopObject Верхняя граница (Панель или ребро)
+     * @param BottomObject Нижняя граница (Панель или ребро)
      */
-    Setup(LeftObject, RightObject, TopObject, BottomObject);
+    Setup(LeftObject: Panel, RightObject:Panel, TopObject: Panel | Edge3, BottomObject: Panel | Edge3);
 
 }
 
-declare type ScItemTovar = {
+declare class ScItemTovar{
     /**
      * Артикул элемента товара
      */
@@ -2440,7 +2339,7 @@ declare type ScItemTovar = {
 
 }
 
-declare type ScItemTovarList = {
+declare class ScItemTovarList{
     /**
      * Доступ к элементу товара по индексу
      * @param [index]
@@ -2459,7 +2358,7 @@ declare type ScItemTovarList = {
      * @param name
      * @param CaseSensitive
      */
-    FindByName(name, CaseSensitive): ScItemTovar;
+    FindByName(name: string, CaseSensitive): ScItemTovar;
 
 }
 
@@ -2467,7 +2366,7 @@ declare type ScItemTovarList = {
 
 
 
-declare type Arguments = {
+declare class Arguments extends Object{
     /**
      * 
      */
@@ -2476,10 +2375,6 @@ declare type Arguments = {
      * 
      */
     length: Number;
-    /**
-     * 
-     */
-    $$proto: Object;
 
 }
 /**
@@ -2488,14 +2383,14 @@ declare type Arguments = {
  * @param y
  * @param z
  */
-declare function NewVector(x, y, z): Vector;
+declare function NewVector(x: number, y: number, z: number): Vector;
 
 /**
  * Создать 2D точку по координатам
  * @param x
  * @param y
  */
-declare function NewPoint(x, y): Point;
+declare function NewPoint(x: number, y: number): Point;
 
 /**
  * Создать плоский контур
@@ -2506,7 +2401,7 @@ declare function NewContour(): Contour2D;
  * Создать новый COM объект по его типу
  * @param CLSID
  */
-declare function NewCOMObject(CLSID): IDispatch;
+declare function NewCOMObject(CLSID: string): IDispatch;
 
 /**
  * Создать форму со свойствами
@@ -2519,26 +2414,26 @@ declare function NewForm(): ScriptForm;
  * @param  schemeGroup
  * @param  schemeName
  */
-declare function OpenFurnitureScheme(filename, schemeGroup, schemeName): FurnitureScheme;
+declare function OpenFurnitureScheme(filename: string, schemeGroup: string, schemeName: string): FurnitureScheme;
 
 /**
  * Открыть группу схем установки крепежа
  * @param filename
  * @param  schemeGroup
  */
-declare function OpenFurnitureSchemes(filename, schemeGroup): FurnitureSchemes;
+declare function OpenFurnitureSchemes(filename: string, schemeGroup: string): FurnitureSchemes;
 
 /**
  * Создать схему установки крепежа
  * @param schemeName
  */
-declare function NewFurnitureScheme(schemeName): FurnitureScheme;
+declare function NewFurnitureScheme(schemeName: string): FurnitureScheme;
 
 /**
  * Создать схему секции
  * @param schemeName
  */
-declare function NewSectionScheme(schemeName): SectionScheme;
+declare function NewSectionScheme(schemeName: string): SectionScheme;
 
 /**
  * Создать базу параметрического крепежа
@@ -2627,7 +2522,7 @@ declare function confirm(message): Boolean;
  * Открыть фурнитуру для установки на модель
  * @param filename
  */
-declare function OpenFurniture(filename): InfFurniture;
+declare function OpenFurniture(filename: string): InfFurniture;
 
 /**
  * Выделить всё
@@ -2648,39 +2543,39 @@ declare function ViewAll();
  * Установить текущий вид
  * @param p3d
  */
-declare function SetCamera(p3d);
+declare function SetCamera(p3d: Vector);
 
 /**
  * Запрос точки
  * @param hint
  */
-declare function GetPoint(hint): Vector;
+declare function GetPoint(hint: string): Vector;
 
 /**
  * Запрос объекта модели
  * @param hint
  */
-declare function GetObject(hint): Object3;
+declare function GetObject(hint: string): Object3;
 
 /**
  * Запрос панели
  * @param hint
  */
-declare function GetPanel(hint): Panel;
+declare function GetPanel(hint: string): Panel;
 
 /**
  * Запрос выбора ребра, параллельного указанному вектору
  * @param hint
  * @param Axis
  */
-declare function GetEdge(hint, Axis): Edge3;
+declare function GetEdge(hint: string, Axis: Vector): Edge3;
 
 /**
  * Создать панель указанных размеров
  * @param width
  * @param height
  */
-declare function AddPanel(width, height): Panel;
+declare function AddPanel(width: number, height: number): Panel;
 
 /**
  * Создать фронтальную панель
@@ -2690,7 +2585,7 @@ declare function AddPanel(width, height): Panel;
  * @param y2
  * @param z
  */
-declare function AddFrontPanel(x1, y1, x2, y2, z): Panel;
+declare function AddFrontPanel(x1: number, y1: number, x2: number, y2: number, z: number): Panel;
 
 /**
  * Создать горизонтальную панель
@@ -2700,7 +2595,7 @@ declare function AddFrontPanel(x1, y1, x2, y2, z): Panel;
  * @param z2
  * @param y
  */
-declare function AddHorizPanel(x1, z1, x2, z2, y): Panel;
+declare function AddHorizPanel(x1: number, z1: number, x2: number, z2: number, y: number): Panel;
 
 /**
  * Создать вертикальную панель
@@ -2710,51 +2605,51 @@ declare function AddHorizPanel(x1, z1, x2, z2, y): Panel;
  * @param y2
  * @param x
  */
-declare function AddVertPanel(z1, y1, z2, y2, x): Panel;
+declare function AddVertPanel(z1: number, y1: number, z2: number, y2: number, x: number): Panel;
 
 /**
  * Создать профиль
  * @param name
  */
-declare function AddExtrusion(name): Extrusion;
+declare function AddExtrusion(name: string): Extrusion;
 
 /**
  * Создать тело по траектории
  * @param name
  */
-declare function AddTrajectory(name): Trajectory;
+declare function AddTrajectory(name: string): Trajectory;
 
 /**
  * Создать мебельный блок
  * @param name
  */
-declare function AddBlock(name): Block;
+declare function AddBlock(name: string): Block;
 
 /**
  * Создать полуфабрикат
  * @param name
  */
-declare function AddDraftBlock(name): Block;
+declare function AddDraftBlock(name: string): Block;
 
 /**
  * Создать мебельную сборку
  * @param name
  */
-declare function AddAssembly(name): Block;
+declare function AddAssembly(name: string): Block;
 
 /**
  * Создать копию объекта
  * @param obj
  */
-declare function AddCopy(obj): Object3;
+declare function AddCopy(obj: Object3): Object3;
 
 /**
  * Создать симметричную копию объекта
  * @param obj
- * @param  pos
+ * @param  pos 
  * @param  normal
  */
-declare function AddSymmetry(obj, pos, normal): Object3;
+declare function AddSymmetry(obj: string, pos: Vector, normal: Vector): Object3;
 
 /**
  * Создать вспомогательный контур в пространстве
@@ -2767,7 +2662,7 @@ declare function AddContour(): Contour3D;
  * @param pos2
  * @param toppos
  */
-declare function AddSize(pos1, pos2, toppos): Size3D;
+declare function AddSize(pos1: Vector, pos2: Vector, toppos: Vector): Size3D;
 
 /**
  * Удалить объекты ранее созданные в скрипте
@@ -2778,19 +2673,19 @@ declare function DeleteNewObjects();
  * Удалить объект из модели
  * @param obj
  */
-declare function DeleteObject(obj);
+declare function DeleteObject(obj: Object3);
 
 /**
  * Функция начала редактирования объекта
  * @param obj
  */
-declare function StartEditing(obj): Object3;
+declare function StartEditing(obj: Object3): Object3;
 
 /**
  * Начать создание блока. Все созданные далее объекты попадают внутрь блока
  * @param name
  */
-declare function BeginBlock(name): Block;
+declare function BeginBlock(name: string): Block;
 
 /**
  * Закончить создание блока
@@ -2801,7 +2696,7 @@ declare function EndBlock();
  * Начать создание редактируемого блока
  * @param name
  */
-declare function BeginParametricBlock(name): Block;
+declare function BeginParametricBlock(name: string): Block;
 
 /**
  * Закончить создание редактируемого блока
@@ -2817,37 +2712,37 @@ declare var ParametricBlock: Block;
  * Создать элемент управления - кнопку
  * @param caption
  */
-declare function NewButtonInput(caption): InButton;
+declare function NewButtonInput(caption: string): InButton;
 
 /**
  * Создать элемент управления для ввода целого числа
  * @param caption
  */
-declare function NewFloatInput(caption): InFloat;
+declare function NewFloatInput(caption: string): InFloat;
 
 /**
  * Создать элемент управления для ввода числа
  * @param caption
  */
-declare function NewNumberInput(caption): InNumber;
+declare function NewNumberInput(caption: string): InNumber;
 
 /**
  * Создать элемент управления для выбора материала
  * @param caption
  */
-declare function NewMaterialInput(caption): InMaterial;
+declare function NewMaterialInput(caption: string): InMaterial;
 
 /**
  * Создать элемент управления для выбора кромочного материала
  * @param caption
  */
-declare function NewButtMaterialInput(caption): InButtMaterial;
+declare function NewButtMaterialInput(caption: string): InButtMaterial;
 
 /**
  * Создать элемент управления для выбора фурнитуры
  * @param caption
  */
-declare function NewFurnitureInput(caption): InFurniture;
+declare function NewFurnitureInput(caption: string): InFurniture;
 
 /**
  * Создать элемент управления для анализа модели
@@ -2858,13 +2753,13 @@ declare function NewModelInspector(): ModelInspector;
  * Создать мастер установки дверей
  * @param caption
  */
-declare function NewDoorsMaker(caption): DoorsMaker;
+declare function NewDoorsMaker(caption: string): DoorsMaker;
 
 /**
  * Создать мастер установки ящиков
  * @param caption
  */
-declare function NewBoxesMaker(caption): BoxesMaker;
+declare function NewBoxesMaker(caption: string): BoxesMaker;
 
 /**
  * Список элементов товара. Только для Салона

@@ -1,12 +1,3 @@
-var transformer = NewModelTransformer();
-
-/*second variant*/
-var left, right;
-var localPosLeft = NewVector(0, 0, 1);
-var localPosRight = NewVector(0, 0, 1);
-var panel;
-Action.Continue();
-
 class PanelInfo{
   panel: Panel;
   editorLeft: ValueEditor;
@@ -23,27 +14,6 @@ class PanelInfo{
 }
 
 class PanelsInfo extends Array<PanelInfo>{
-}
-
-var FinishSelecting = false;
-
-NewButtonInput('Отменить').OnChange = ()=>{
-  Action.Cancel;
-}
-
-NewButtonInput('Закончить').OnChange = () => {
-  ApplyChanges();
-  Action.Finish();
-}
-
-let panels = new PanelsInfo();
-
-for (var i = 0; i < Model.SelectionCount; i ++){
-    let panel = Model.Selections[i].AsPanel;
-    if (panel){
-      let newInfo = new PanelInfo(panel);
-      panels.push(newInfo);
-    }
 }
 
 function FindEditor(edit: ValueEditor){
@@ -75,13 +45,12 @@ function MakeInfo(){
     let thicknessDiff = ActiveMaterial.Thickness - panel.Thickness;
     info.thicknessDiff = thicknessDiff;
     transformer.AddPanelThicknessChange(panel, thicknessDiff);
-    transformer.PanelDirection[panel] = 1;
     info.editorLeft.Visible = true;
     info.editorLeft.Readonly = false;
-    info.editorLeft.Value = thicknessDiff / 2;
+    info.editorLeft.Value = -transformer.PanelShift[panel];
     info.editorRight.Visible = true;
     info.editorRight.Readonly = false;
-    info.editorRight.Value = thicknessDiff / 2;
+    info.editorRight.Value = thicknessDiff - info.editorLeft.Value;
   }
 }
 
@@ -94,6 +63,36 @@ function ResetEditPos(info: PanelInfo){
   localPosRight.z = Model.DS.MillimetersInPixel() * (panel.Thickness + 50);
   pos = panel.ToGlobal(localPosRight);
   info.editorRight.Position = Model.DS.ToScreen(pos)
+}
+
+var transformer = NewModelTransformer();
+
+/*second variant*/
+var left, right;
+var localPosLeft = NewVector(0, 0, 1);
+var localPosRight = NewVector(0, 0, 1);
+var panel;
+Action.Continue();
+
+var FinishSelecting = false;
+
+NewButtonInput('Отменить').OnChange = ()=>{
+  Action.Cancel;
+}
+
+NewButtonInput('Закончить').OnChange = () => {
+  ApplyChanges();
+  Action.Finish();
+}
+
+let panels = new PanelsInfo();
+
+for (var i = 0; i < Model.SelectionCount; i ++){
+    let panel = Model.Selections[i].AsPanel;
+    if (panel){
+      let newInfo = new PanelInfo(panel);
+      panels.push(newInfo);
+    }
 }
 
 let matInput = NewMaterialInput('Новый материал');

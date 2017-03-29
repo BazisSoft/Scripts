@@ -8,8 +8,10 @@ class PanelInfo{
     this.panel = p;
     this.editorLeft = NewValueEditor(0);
     this.editorLeft.Visible = false;
+    this.editorLeft.Text = '0';
     this.editorRight = NewValueEditor(0);
     this.editorRight.Visible = false;
+    this.editorRight.Text = '0';
   }
 }
 
@@ -39,6 +41,7 @@ function FindEditor(edit: ValueEditor){
 }
 
 function MakeInfo(){
+  let autoExists: boolean = (transformer.TestVersion) && transformer.TestVersion() > 0; 
   for (let i = 0; i < panels.length; i++){
     let info = panels[i];
     let panel = info.panel;
@@ -47,10 +50,20 @@ function MakeInfo(){
     transformer.AddPanelThicknessChange(panel, thicknessDiff);
     info.editorLeft.Visible = true;
     info.editorLeft.Readonly = false;
-    info.editorLeft.Value = -transformer.PanelShift[panel];
     info.editorRight.Visible = true;
     info.editorRight.Readonly = false;
-    info.editorRight.Value = thicknessDiff - info.editorLeft.Value;
+    if (!autoExists){
+      info.editorLeft.Value = -transformer.PanelShift[panel];
+      info.editorRight.Value = thicknessDiff - info.editorLeft.Value;
+    }
+  }
+  if (autoExists){
+    transformer.Compute(true);
+    for (let i = 0; i < panels.length; i++){
+      let info = panels[i];
+      info.editorLeft.Value = -transformer.PanelShift[info.panel];
+      info.editorRight.Value = info.thicknessDiff - info.editorLeft.Value;
+    }
   }
 }
 

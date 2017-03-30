@@ -1,10 +1,20 @@
-class PanelInfo{
+/**
+ * класс - информация о панели
+ */
+class PanelInfo {
   panel: Panel;
+  //редакторы изменения толщины
+  /*
+   * левый: в сторону локального -z
+   */
   editorLeft: ValueEditor;
+  /**
+   * правый: в сторону локального +z
+   */
   editorRight: ValueEditor;
   thicknessDiff: number;
-  
-  constructor (p:Panel){
+  //конструктор класса
+  constructor(p: Panel) {
     this.panel = p;
     this.editorLeft = NewValueEditor(0);
     this.editorLeft.Visible = false;
@@ -15,22 +25,28 @@ class PanelInfo{
   }
 }
 
+/**
+ * массив всех информаций о панели
+ */
 class PanelsInfo extends Array<PanelInfo>{
 }
 
-function FindEditor(edit: ValueEditor){
+/**
+ * функция поиска информации о панели по ValueEditor
+ */
+function FindEditor(edit: ValueEditor) {
   let found = false;
   let isLeft = false;
-  for (let k = 0; k < panels.length; k++){
+  for (let k = 0; k < panels.length; k++) {
     let info = panels[k];
-    if (info.editorLeft == edit){
+    if (info.editorLeft == edit) {
       found = true;
       isLeft = true;
     }
-    else if (info.editorRight == edit){
+    else if (info.editorRight == edit) {
       found = true;
     }
-    if (found){
+    if (found) {
       return {
         left: isLeft,
         panelInfo: info
@@ -40,9 +56,12 @@ function FindEditor(edit: ValueEditor){
   return undefined;
 }
 
-function MakeInfo(){
-  let autoExists: boolean = (transformer.TestVersion) && transformer.TestVersion() > 0; 
-  for (let i = 0; i < panels.length; i++){
+/**
+ * функция заполнения информации об изменении толщины панели
+ */
+function MakeInfo() {
+  let autoExists: boolean = (transformer.TestVersion) && transformer.TestVersion() > 0;
+  for (let i = 0; i < panels.length; i++) {
     let info = panels[i];
     let panel = info.panel;
     let thicknessDiff = ActiveMaterial.Thickness - panel.Thickness;
@@ -52,14 +71,14 @@ function MakeInfo(){
     info.editorLeft.Readonly = false;
     info.editorRight.Visible = true;
     info.editorRight.Readonly = false;
-    if (!autoExists){
+    if (!autoExists) {
       info.editorLeft.Value = -transformer.PanelShift[panel];
       info.editorRight.Value = thicknessDiff - info.editorLeft.Value;
     }
   }
-  if (autoExists){
+  if (autoExists) {
     transformer.Compute(true);
-    for (let i = 0; i < panels.length; i++){
+    for (let i = 0; i < panels.length; i++) {
       let info = panels[i];
       info.editorLeft.Value = -transformer.PanelShift[info.panel];
       info.editorRight.Value = info.thicknessDiff - info.editorLeft.Value;
@@ -67,29 +86,45 @@ function MakeInfo(){
   }
 }
 
-function ResetEditPos(info: PanelInfo){
+/**
+ * Перерасчет позиции ValueEditor на экране
+ * @param info 
+ */
+function ResetEditPos(info: PanelInfo) {
   let panel = info.panel;
-  localPosLeft.z = Model.DS.MillimetersInPixel() * (panel.Thickness - 50);
+  var localPosLeft = panel.GMin;
+  var localPosRight = panel.GMin;
+  //отступ левого и правого ValueEditor от GMin панели
+  var indent = Model.DS.MillimetersInPixel() * (50);
+  localPosLeft.z -= indent;
   var pos = panel.ToGlobal(localPosLeft);
   info.editorLeft.Position = Model.DS.ToScreen(pos)
 
-  localPosRight.z = Model.DS.MillimetersInPixel() * (panel.Thickness + 50);
+  localPosRight.z += indent;
   pos = panel.ToGlobal(localPosRight);
   info.editorRight.Position = Model.DS.ToScreen(pos)
+}
+
+/**
+ * применение изменений
+ */
+function ApplyChanges() {
+  for (let i = 0; i < panels.length; i++) {
+    panels[i].panel.MaterialName = ActiveMaterial.Name;
+  }
+  transformer.Apply(Undo);
+  Action.Commit();
 }
 
 var transformer = NewModelTransformer();
 
 /*second variant*/
-var left, right;
-var localPosLeft = NewVector(0, 0, 1);
-var localPosRight = NewVector(0, 0, 1);
 var panel;
 Action.Continue();
 
 var FinishSelecting = false;
 
-NewButtonInput('Отменить').OnChange = ()=>{
+NewButtonInput('Отменить').OnChange = () => {
   Action.Cancel;
 }
 
@@ -100,17 +135,18 @@ NewButtonInput('Закончить').OnChange = () => {
 
 let panels = new PanelsInfo();
 
-for (var i = 0; i < Model.SelectionCount; i ++){
-    let panel = Model.Selections[i].AsPanel;
-    if (panel){
-      let newInfo = new PanelInfo(panel);
-      panels.push(newInfo);
-    }
+for (var i = 0; i < Model.SelectionCount; i++) {
+  let panel = Model.Selections[i].AsPanel;
+  if (panel) {
+    let newInfo = new PanelInfo(panel);
+    panels.push(newInfo);
+  }
 }
 
 let matInput = NewMaterialInput('Новый материал');
-matInput.OnChange = ()=>{
-  ActiveMaterial.Make(matInput.Name, matInput.Thickness);    
+matInput.OnChange = () => {
+  ActiveMaterial.Make(matInput.Name, matInput.Thickness);
+  //обработка события отрисовки
   Action.OnDraw = function () {
     for (let k = 0; k < panels.length; k++)
       ResetEditPos(panels[k]);
@@ -118,6 +154,7 @@ matInput.OnChange = ()=>{
   MakeInfo();
 }
 
+//обработчик изменения значения в ValueEditor
 Action.OnValueChange = () => {
   let searchResult = FindEditor(Action.ActionValueEditor)
   let info = searchResult.panelInfo;
@@ -162,12 +199,4 @@ Action.OnValueChange = () => {
     left.Value = thicknessDiff - right.Value;
     transformer.PanelShift[panel] = - left.Value;
   }
-}
-
-function ApplyChanges(){
-  for (let i = 0; i < panels.length; i ++){
-    panels[i].panel.MaterialName = ActiveMaterial.Name;
-  }
-  transformer.Apply(Undo);
-  Action.Commit();
 }

@@ -18,10 +18,10 @@ class PanelInfo {
     this.panel = p;
     this.editorLeft = NewValueEditor(0);
     this.editorLeft.Visible = false;
-    this.editorLeft.Text = '0';
+    this.editorLeft.Text = 0;
     this.editorRight = NewValueEditor(0);
     this.editorRight.Visible = false;
-    this.editorRight.Text = '0';
+    this.editorRight.Text = 0;
   }
 }
 
@@ -125,7 +125,7 @@ Action.Continue();
 var FinishSelecting = false;
 
 NewButtonInput('Отменить').OnChange = () => {
-  Action.Cancel;
+  Action.Cancel();
 }
 
 NewButtonInput('Закончить').OnChange = () => {

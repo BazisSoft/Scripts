@@ -77,7 +77,9 @@ function MakeInfo() {
     }
   }
   if (autoExists) {
+    Action.Hint = 'Подождите';
     transformer.Compute(true);
+    Action.Hint = '';
     for (let i = 0; i < panels.length; i++) {
       let info = panels[i];
       info.editorLeft.Value = -transformer.PanelShift[info.panel];
@@ -112,7 +114,9 @@ function ApplyChanges() {
   for (let i = 0; i < panels.length; i++) {
     panels[i].panel.MaterialName = ActiveMaterial.Name;
   }
+  Action.Hint = 'Подождите';
   transformer.Apply(Undo);
+  Action.Hint = '';
   Action.Commit();
 }
 

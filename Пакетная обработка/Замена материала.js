@@ -1,14 +1,15 @@
 ﻿// Данный скрипт предназначен для быстрой замены материалов во всех моделях 
 // всех файлов в папке, в которой он размещен.
-import * as fs from 'fs';
-import * as path from 'path';
+
+fs = require('fs');
+path = require('path');
 
 let oldMat = NewMaterialInput('Старый материал');
 let newMat = NewMaterialInput('Новый материал');
 let ApplyBtn = NewButtonInput('Заменить материал');
 ApplyBtn.Visible = false;
 ApplyBtn.OnChange = function () {
-    ChangeMaterial(oldMat.Name, newMat.Name, newMat.Thickness);
+    ChangeMaterial(oldMat.Name, newMat.Name, newMat.Thickness, './');
     Action.Finish();
 }
 
@@ -36,29 +37,41 @@ newMat.OnChange = function () {
     ShowFinishBtn();
 }
 
-function ChangeMaterial(oldName, newName, newThickness) {
+function ChangeMaterial(oldName, newName, newThickness, folder) {
     // список имен всех фалов в папке, где находится скрипт
-    let names = fs.readdirSync('./');
+    let names = fs.readdirSync(folder);
+    let files = [];
+    let objCount = 0;
     // перебор всех имен файлов в папке
     for (let fileName of names) {
         // ext - расширение файла
         let ext = path.extname(fileName);
         // проверка расширения файла
         if (ext.toLowerCase() == '.b3d') {
-            Action.LoadModel(fileName);
+            Action.LoadModel(folder + fileName);
+            ViewAll();
+            let modelChanged = false;
             //перебор всех объектов в модели                            
             Model.forEach(function (obj) {
                 if (obj && obj.MaterialName == oldName) {
                     //запись изменения объекта для возможности отменый изменений
                     Undo.Changing(obj);
+                    modelChanged = true;
                     obj.MaterialName = newName;
+                    objCount++;
                     if (obj.Thickness)
                         obj.Thickness = newThickness;
                 }
             })
-            Action.Commit();
-            Action.SaveModel(fileName);
+            if (modelChanged){
+                Action.Commit();
+                Model.Build();
+                // Action.SaveModel(fileName);
+                files.push(folder + fileName);
+            }
         }
     }
+    alert(`Замена материалов с "${FormatMatName(oldMat.Name)}" на "${FormatMatName(newMat.Name)}" 
+     произведена на ${objCount} объектах в ${files.length} файлах:\n${files.join('\n')}`);
 }
 Action.Continue();

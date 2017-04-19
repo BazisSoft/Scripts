@@ -69,13 +69,13 @@ function ParamIsScheme(param: ParamFastener | InfFurniture){
     return false;
 }
 
-let cnt = Model.Count;
 /**
  * Блок временных объектов стыка
  */
 let edgeBlock = BeginBlock('edges');
 EndBlock();
 
+let cnt = Model.SelectionCount;
 let infoList = new JointList();
 for (let i = 0; i < cnt; i ++){
     let obj = Model.Selections[i];
@@ -117,7 +117,7 @@ Action.OnFinish = ()=>{
     Action.OnDraw = null;
 }
 
-let furnSel = Action.Properties.NewFurniture('Scheme');
+let furnSel = Action.Properties.NewFurniture('Схема');
 furnSel.OnChange = ()=>{
     let newScheme = furnSel.Value;
     if (ParamIsScheme(newScheme)){

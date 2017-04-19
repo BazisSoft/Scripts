@@ -47,11 +47,11 @@ function ChangeMaterial(oldName, newName, newThickness, folder) {
     let names = fs.readdirSync(folder);
     let files = [];
     let objCount = 0;
-    let count = 0;
+    let fileIndex = 0;
 
     function ProcessNextFile() {
-        let fileName = names[count];
-        Action.Hint = `обработка файла ${count + 1} из ${names.length} - ${fileName}`;
+        let fileName = names[fileIndex];
+        Action.Hint = `обработка файла ${fileIndex + 1} из ${names.length} - ${fileName}`;
         // ext - расширение файла
         let ext = path.extname(fileName);
         // проверка расширения файла
@@ -78,8 +78,8 @@ function ChangeMaterial(oldName, newName, newThickness, folder) {
                 files.push(folder + fileName);
             }
         }
-        count++;
-        if (count < names.length) {
+        fileIndex++;
+        if (fileIndex < names.length) {
             Action.AsyncExec(ProcessNextFile);
         }
         else {

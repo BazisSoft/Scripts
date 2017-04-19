@@ -1,7 +1,7 @@
 ﻿/**
  * Класс, отвечающий за установку стыка
  */
-class JointMaker{
+class JointMaker {
     /**
      * Стык
      */
@@ -10,7 +10,7 @@ class JointMaker{
      * Информация о стыке
      */
     info: JointInfo;
-    constructor (newInfo: JointInfo){
+    constructor(newInfo: JointInfo) {
         this.info = newInfo;
         this.joint = NewAdvancedJoint(newInfo);
         this.info.SetEdgesOwner(edgeBlock);
@@ -19,14 +19,14 @@ class JointMaker{
      * Установить новую схему для стыка
      * @param newScheme 
      */
-    SetScheme(newScheme: ParamFastener): boolean{
+    SetScheme(newScheme: ParamFastener): boolean {
         this.joint.Scheme = newScheme;
         return true;
     }
     /** 
      * Смонтировать стык
      */
-    MakePreview(){
+    MakePreview() {
         this.joint.Mount();
     }
 };
@@ -38,7 +38,7 @@ class JointList extends Array<JointMaker>{
      * Установить схему для всех стыков в списке
      * @param newScheme 
      */
-    SetScheme(newScheme: ParamFastener){
+    SetScheme(newScheme: ParamFastener) {
         this.forEach(element => {
             element.SetScheme(newScheme);
         });
@@ -46,9 +46,9 @@ class JointList extends Array<JointMaker>{
     /**
      * Предпросмотр стыков
      */
-    MakePreview(){
+    MakePreview() {
         this.forEach(element => {
-            if (element.info.JointType != pjtUnknown){
+            if (element.info.JointType != pjtUnknown) {
                 element.joint.Mount();
                 element.joint.JointBlock.Owner = Model.Temp;
             }
@@ -59,8 +59,8 @@ class JointList extends Array<JointMaker>{
  * Проверка, является ли параметр схемой
  * @param param параметрический крепеж
  */
-function ParamIsScheme(param: ParamFastener | InfFurniture){
-    if (param){
+function ParamIsScheme(param: ParamFastener | InfFurniture) {
+    if (param) {
         if (param.DatumMode)
             return param.DatumMode == fdmJoint;
         else if (param.GetInfo)
@@ -77,13 +77,13 @@ EndBlock();
 
 let cnt = Model.SelectionCount;
 let infoList = new JointList();
-for (let i = 0; i < cnt; i ++){
+for (let i = 0; i < cnt; i++) {
     let obj = Model.Selections[i];
-    for (let k = i+1; k < cnt; k++){
+    for (let k = i + 1; k < cnt; k++) {
         let obj2 = Model.Selections[k]
         let info = NewJointInfo(obj, obj2);
-        if (info){
-            for (let j = 0; j < info.JointCount; j++){                
+        if (info) {
+            for (let j = 0; j < info.JointCount; j++) {
                 if (info.Joints[j].JointType != pjtUnknown)
                     infoList.push(new JointMaker(info.Joints[j]));
             }
@@ -91,21 +91,21 @@ for (let i = 0; i < cnt; i ++){
     }
 }
 
-Action.OnDraw = function(){
-    for (let i = 0; i < infoList.length; i++){
+Action.OnDraw = function () {
+    for (let i = 0; i < infoList.length; i++) {
         let info = infoList[i];
         let jointInfo = info.info;
         if (jointInfo.JointType != pjtUnknown)
-            jointInfo.DrawLines();        
+            jointInfo.DrawLines();
     }
 };
 
-Action.OnClick = () =>{
+Action.OnClick = () => {
     let edge = Model.DS.FindEdge(edgeBlock, Action.MousePos, 5);
-    if (edge){
-        for (let i = 0; i < infoList.length; i++){
+    if (edge) {
+        for (let i = 0; i < infoList.length; i++) {
             let info = infoList[i];
-            if (info.joint.SelectEdge(edge)){
+            if (info.joint.SelectEdge(edge)) {
                 break;
             }
         }
@@ -113,31 +113,29 @@ Action.OnClick = () =>{
 }
 
 Action.Continue();
-Action.OnFinish = ()=>{
+Action.OnFinish = () => {
     Action.OnDraw = null;
 }
 
 let furnSel = Action.Properties.NewFurniture('Схема');
-furnSel.OnChange = ()=>{
+furnSel.OnChange = () => {
     let newScheme = furnSel.Value;
-    if (ParamIsScheme(newScheme)){
+    if (ParamIsScheme(newScheme)) {
         infoList.SetScheme(newScheme.GetInfo().Params);
         finishBtn.Visible = true;
     }
-    else{
+    else {
         alert('Выберите схему крепежа');
         furnSel.ClearValue();
     }
 }
-NewButtonInput('Предпросмотр').OnChange = ()=>{
+NewButtonInput('Предпросмотр').OnChange = () => {
     infoList.MakePreview();
 }
 let finishBtn = NewButtonInput('Закончить');
 finishBtn.Visible = false;
-finishBtn.OnChange = ()=>{
+finishBtn.OnChange = () => {
     // удаление блока со вспомогательными объектами
     DeleteObject(edgeBlock);
     Action.Finish();
 }
-//val.Value.GetInfo().Params - Joint shceme;
-system.include('D:\\Bazis10\\3DScript\\Samples\\FormScriptExec.js');

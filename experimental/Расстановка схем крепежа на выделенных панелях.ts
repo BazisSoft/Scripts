@@ -99,21 +99,28 @@ Action.OnDraw = function () {
             jointInfo.DrawLines();
     }
 };
+Model.UnSelectAll();
 
 Action.OnClick = () => {
     let edge = Model.DS.FindEdge(edgeBlock, Action.MousePos, 5);
+    let found = false;
     if (edge) {
         for (let i = 0; i < infoList.length; i++) {
             let info = infoList[i];
             if (info.joint.SelectEdge(edge)) {
+                found = true;
                 break;
             }
         }
     }
+    if (found)
+        infoList.MakePreview();
 }
 
 Action.Continue();
 Action.OnFinish = () => {
+    // удаление блока со вспомогательными объектами
+    DeleteObject(edgeBlock);
     Action.OnDraw = null;
 }
 
@@ -135,7 +142,5 @@ NewButtonInput('Предпросмотр').OnChange = () => {
 let finishBtn = NewButtonInput('Закончить');
 finishBtn.Visible = false;
 finishBtn.OnChange = () => {
-    // удаление блока со вспомогательными объектами
-    DeleteObject(edgeBlock);
     Action.Finish();
 }

@@ -48,8 +48,10 @@ class JointList extends Array<JointMaker>{
      */
     MakePreview(){
         this.forEach(element => {
-            element.joint.Mount();
-            element.joint.JointBlock.Owner = Model.Temp;
+            if (element.info.JointType != pjtUnknown){
+                element.joint.Mount();
+                element.joint.JointBlock.Owner = Model.Temp;
+            }
         });
     }
 }
@@ -68,8 +70,12 @@ function ParamIsScheme(param: ParamFastener | InfFurniture){
 }
 
 let cnt = Model.Count;
+/**
+ * Блок временных объектов стыка
+ */
 let edgeBlock = BeginBlock('edges');
 EndBlock();
+
 let infoList = new JointList();
 for (let i = 0; i < cnt; i ++){
     let obj = Model.Selections[i];
@@ -107,7 +113,6 @@ Action.OnClick = () =>{
 }
 
 Action.Continue();
-//Action.ShowEdges = true;
 Action.OnFinish = ()=>{
     Action.OnDraw = null;
 }
@@ -120,13 +125,14 @@ furnSel.OnChange = ()=>{
         finishBtn.Visible = true;
     }
     else{
-        alert('please choose scheme');
+        alert('Выберите схему крепежа');
+        furnSel.ClearValue();
     }
 }
-NewButtonInput('MakePreview').OnChange = ()=>{
+NewButtonInput('Предпросмотр').OnChange = ()=>{
     infoList.MakePreview();
 }
-let finishBtn = NewButtonInput('Finish');
+let finishBtn = NewButtonInput('Закончить');
 finishBtn.Visible = false;
 finishBtn.OnChange = ()=>{
     // удаление блока со вспомогательными объектами

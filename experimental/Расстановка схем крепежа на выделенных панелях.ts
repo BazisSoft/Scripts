@@ -1,4 +1,9 @@
-﻿/**
+﻿enum ActionStage {
+    DeleteExcessJoints,
+    ChangingEdges
+}
+
+/**
  * Класс, отвечающий за установку стыка
  */
 class JointMaker {
@@ -50,7 +55,6 @@ class JointList extends Array<JointMaker>{
         this.forEach(element => {
             if (element.info.JointType != pjtUnknown) {
                 element.joint.Mount();
-                element.joint.JointBlock.Owner = Model.Temp;
             }
         });
     }
@@ -61,12 +65,21 @@ class JointList extends Array<JointMaker>{
  */
 function ParamIsScheme(param: ParamFastener | InfFurniture) {
     if (param) {
-        if (param.DatumMode)
-            return param.DatumMode == fdmJoint;
-        else if (param.GetInfo)
-            return param.GetInfo().Params.DatumMode == fdmJoint;
+        if (param.GetInfo)
+            param = param.GetInfo().Params;
+        return param && param.DatumMode == fdmJoint && param.IsValid();
     }
     return false;
+}
+
+const settingsFilename = 'jointSettings.xml';
+function LoadSettings(){
+    if (system.fileExists(settingsFilename)){
+        return Action.Properties.Load(settingsFilename);
+    }
+}
+function SaveSettings(){
+    Action.Properties.Save(settingsFilename);
 }
 
 /**
@@ -75,8 +88,10 @@ function ParamIsScheme(param: ParamFastener | InfFurniture) {
 let edgeBlock = BeginBlock('edges');
 EndBlock();
 
+let CurStage = ActionStage.DeleteExcessJoints;
 let cnt = Model.SelectionCount;
 let infoList = new JointList();
+let removedList = new JointList();
 for (let i = 0; i < cnt; i++) {
     let obj = Model.Selections[i];
     for (let k = i + 1; k < cnt; k++) {
@@ -95,26 +110,54 @@ Action.OnDraw = function () {
     for (let i = 0; i < infoList.length; i++) {
         let info = infoList[i];
         let jointInfo = info.info;
-        if (jointInfo.JointType != pjtUnknown)
-            jointInfo.DrawLines();
+        if (removedList.indexOf(info) < 0)
+            jointInfo.Draw(selectedColor.Value);
+        else if (CurStage == ActionStage.DeleteExcessJoints)
+            jointInfo.Draw(removedColor.Value);
     }
 };
 Model.UnSelectAll();
 
 Action.OnClick = () => {
-    let edge = Model.DS.FindEdge(edgeBlock, Action.MousePos, 5);
-    let found = false;
-    if (edge) {
+    if (CurStage == ActionStage.DeleteExcessJoints){
+        let minDist = -1;
+        let result: JointMaker = null;
         for (let i = 0; i < infoList.length; i++) {
-            let info = infoList[i];
-            if (info.joint.SelectEdge(edge)) {
-                found = true;
-                break;
+            let jointInfo = infoList[i];
+            let dist = jointInfo.info.RayIntersect(Action.MouseX, Action.MouseY);
+            //если не найдено пересечение продолжаем цикл
+            if (dist < 0)
+                continue;
+            if (!result || (dist < minDist)){
+                minDist = dist;
+                result = jointInfo;
+            }
+        }
+        if (result){
+            let index = removedList.indexOf(result)
+            if (index > -1){
+                removedList.splice(index, 1);
+            }
+            else{
+                removedList.push(result);
             }
         }
     }
-    if (found)
-        infoList.MakePreview();
+    if (CurStage == ActionStage.ChangingEdges){
+        let edge = Model.DS.FindEdge(edgeBlock, Action.MousePos, 5);
+        let found = false;
+        if (edge) {
+            for (let i = 0; i < infoList.length; i++) {
+                let info = infoList[i];
+                if (info.joint.SelectEdge(edge)) {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (found)
+            infoList.MakePreview();
+    }
 }
 
 Action.Continue();
@@ -122,25 +165,55 @@ Action.OnFinish = () => {
     // удаление блока со вспомогательными объектами
     DeleteObject(edgeBlock);
     Action.OnDraw = null;
+    SaveSettings();
 }
 
 let furnSel = Action.Properties.NewFurniture('Схема');
 furnSel.OnChange = () => {
+    const msg = 'Выберите схему крепежа';
     let newScheme = furnSel.Value;
     if (ParamIsScheme(newScheme)) {
         infoList.SetScheme(newScheme.GetInfo().Params);
-        finishBtn.Visible = true;
+        if (Action.Hint == msg)
+            Action.Hint = '';
     }
     else {
-        alert('Выберите схему крепежа');
+        Action.Hint = msg;
         furnSel.ClearValue();
     }
 }
-NewButtonInput('Предпросмотр').OnChange = () => {
-    infoList.MakePreview();
+
+let selectedColor = Action.Properties.NewColor('Цвет активных стыков');
+// информация о цветах.
+// http://docwiki.embarcadero.com/RADStudio/Seattle/en/Colors_in_the_VCL
+selectedColor.Value = 0xFF00FF; // пурпурный
+let removedColor = Action.Properties.NewColor('Цвет неактивных стыков');
+removedColor.Value = 0x808080; // Темно-серый
+selectedColor.OnValueChange = removedColor.OnValueChange = Action.OnDraw;
+if (LoadSettings()){
+    let newScheme = furnSel.Value;
+    if (newScheme && ParamIsScheme(newScheme)){
+        infoList.SetScheme(newScheme.GetInfo().Params);
+    }
+    else{
+        furnSel.ClearValue();
+    }
 }
-let finishBtn = NewButtonInput('Закончить');
-finishBtn.Visible = false;
-finishBtn.OnChange = () => {
-    Action.Finish();
+
+let mountSelectedBtn = NewButtonInput('Монировать выделенные стыки');
+mountSelectedBtn.OnChange = () =>{
+    removedList.forEach(element => {
+        let index = infoList.indexOf(element);
+        if (index >= 0){
+            infoList.splice(index, 1);
+        }
+    });
+    mountSelectedBtn.Visible = false;
+    CurStage = ActionStage.ChangingEdges;
+
+    let finishBtn = NewButtonInput('Закончить');
+    finishBtn.OnChange = () => {
+        Action.Finish();
+    }    
+    infoList.MakePreview();
 }

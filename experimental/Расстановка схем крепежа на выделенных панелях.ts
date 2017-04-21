@@ -200,7 +200,10 @@ if (LoadSettings()){
     }
 }
 
-let mountSelectedBtn = NewButtonInput('Монировать выделенные стыки');
+let countStr = Action.Properties.NewNumber('Количество стыков');
+countStr.Value = infoList.length;
+
+let mountSelectedBtn = NewButtonInput('Монтировать выделенные стыки');
 mountSelectedBtn.OnChange = () =>{
     removedList.forEach(element => {
         let index = infoList.indexOf(element);
@@ -209,6 +212,7 @@ mountSelectedBtn.OnChange = () =>{
         }
     });
     mountSelectedBtn.Visible = false;
+    clearMountedBtn.Visible = false;
     CurStage = ActionStage.ChangingEdges;
 
     let finishBtn = NewButtonInput('Закончить');
@@ -216,4 +220,16 @@ mountSelectedBtn.OnChange = () =>{
         Action.Finish();
     }    
     infoList.MakePreview();
+    countStr.Value = infoList.length;
+}
+
+let clearMountedBtn = NewButtonInput('Удалить стыки, имеющие крепеж');
+clearMountedBtn.OnChange = () =>{
+    for( let i = infoList.length - 1; i > -1; i--){
+        let jointInfo = infoList[i];
+        if (jointInfo.joint.Info.JointExtrusion.FindConnectedFasteners().length > 0){
+            infoList.splice(i, 1);
+        }
+    }
+    countStr.Value = infoList.length;
 }

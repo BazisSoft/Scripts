@@ -181,6 +181,9 @@ furnSel.OnChange = () => {
         Action.Hint = msg;
         furnSel.ClearValue();
     }
+    if (CurStage == ActionStage.ChangingEdges){
+        infoList.MakePreview();
+    }
 }
 
 let selectedColor = Action.Properties.NewColor('Цвет активных стыков');

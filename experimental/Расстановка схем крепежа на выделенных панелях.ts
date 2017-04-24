@@ -1,5 +1,14 @@
-﻿enum ActionStage {
+﻿/**
+ * Стадии расстановки
+ */
+enum ActionStage {
+    /**
+     * Удаление лишних стыков
+     */
     DeleteExcessJoints,
+    /**
+     * Выбор ребра монтирования
+     */
     ChangingEdges
 }
 
@@ -15,6 +24,7 @@ class JointMaker {
      * Информация о стыке
      */
     info: JointInfo;
+
     constructor(newInfo: JointInfo) {
         this.info = newInfo;
         this.joint = NewAdvancedJoint(newInfo);
@@ -41,7 +51,7 @@ class JointMaker {
 class JointList extends Array<JointMaker>{
     /**
      * Установить схему для всех стыков в списке
-     * @param newScheme 
+     * @param newScheme Новая схема
      */
     SetScheme(newScheme: ParamFastener) {
         this.forEach(element => {
@@ -60,7 +70,7 @@ class JointList extends Array<JointMaker>{
     }
 }
 /**
- * Проверка, является ли параметр схемой
+ * Проверка, является ли параметрический крепеж схемой
  * @param param параметрический крепеж
  */
 function ParamIsScheme(param: ParamFastener | InfFurniture) {
@@ -72,6 +82,9 @@ function ParamIsScheme(param: ParamFastener | InfFurniture) {
     return false;
 }
 
+/**
+ * имя файла с настройками
+ */
 const settingsFilename = 'jointSettings.xml';
 function LoadSettings(){
     if (system.fileExists(settingsFilename)){

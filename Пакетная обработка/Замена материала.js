@@ -1,5 +1,5 @@
 ﻿// Данный скрипт предназначен для быстрой замены материалов во всех моделях 
-// всех файлов в папке, в которой он размещен.
+// всех файлов в указанной папке;
 
 fs = require('fs');
 path = require('path');
@@ -49,8 +49,10 @@ function ChangeMaterial(oldName, newName, newThickness, folder) {
     let objCount = 0;
     let fileIndex = 0;
 
+    //процедруа обработки файлов
     function ProcessNextFile() {
         let fileName = names[fileIndex];
+        // вывод прогресса обработки файлов
         Action.Hint = `обработка файла ${fileIndex + 1} из ${names.length} - ${fileName}`;
         // ext - расширение файла
         let ext = path.extname(fileName);
@@ -62,7 +64,7 @@ function ChangeMaterial(oldName, newName, newThickness, folder) {
             //перебор всех объектов в модели                            
             Model.forEach(function (obj) {
                 if (obj && obj.MaterialName == oldName) {
-                    //запись изменения объекта для возможности отменый изменений
+                    //запись изменения объекта для возможности отмены изменений
                     Undo.Changing(obj);
                     modelChanged = true;
                     obj.MaterialName = newName;
@@ -72,19 +74,25 @@ function ChangeMaterial(oldName, newName, newThickness, folder) {
                 }
             })
             if (modelChanged) {
+                // сохранение изменений
                 Action.Commit();
+                //перестроение модели
                 Model.Build();
-                // Action.SaveModel(fileName);
+                // сохранение файла
+                Action.SaveModel(fileName);
                 files.push(folder + fileName);
             }
         }
         fileIndex++;
         if (fileIndex < names.length) {
+            //обработка следующего файла
             Action.AsyncExec(ProcessNextFile);
         }
         else {
+            //вывод информации о произведенной замене
             alert(`Замена материалов с "${FormatMatName(oldMat.Name)}" на "${FormatMatName(newMat.Name)}" 
                 произведена на ${objCount} объектах в ${files.length} файлах:\n${files.join('\n')}`);
+            //завершение скрипта
             Action.Finish();
         }
     };

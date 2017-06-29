@@ -5,15 +5,22 @@
  */
 // создание формы
 let changeform = NewForm();
+let changeSelected = changeform.Properties.NewBool("Заменять на выделенных панелях");
+changeSelected.Align = AlignType.Top;
+changeSelected.Visible = changeSelected.Value = Model.SelectionCount > 0;
+changeSelected.SetLayout(1, 0, 100, 22);
 changeform.Caption = "Замена материала";
 changeform.CancelButton = true;
 changeform.OKButton = true;
-changeform.Height = 367;
-changeform.Width = 399;
-let OldMatGroup = changeform.Properties.NewGroup("Старый материал");
+changeform.Height = 359;
+changeform.Width = 367;
+let AllGroup = changeform.Properties.NewGroup('');
+AllGroup.SetLayout(1, 30, 365, 274);
+AllGroup.Align = AlignType.Client;
+let OldMatGroup = AllGroup.NewGroup("Старый материал");
 OldMatGroup.Align = AlignType.Client;
-OldMatGroup.SetLayout(1, 1, 132, 234);
-let NewMatGroup = changeform.Properties.NewGroup("Новый материал");
+OldMatGroup.SetLayout(1, 1, 149, 311);
+let NewMatGroup = AllGroup.NewGroup("Новый материал");
 NewMatGroup.Align = AlignType.Right;
 NewMatGroup.SetLayout(150, 1, 248, 311);
 
@@ -89,13 +96,27 @@ var transformer = NewModelTransformer();
 
 /** Заполнение формы компонентами */
 function FillForm() {
+    OldMatGroup.Clear();
+    NewMatGroup.Clear();
+    materialChanges.changes.splice(0);
 
-    Model.forEachPanel(panel => {
+    function AddChange(panel: Panel){
         let panelMat = panel.MaterialName;
         if (!materialChanges.ChangeExists(panelMat)) {
             materialChanges.changes.push(new MaterialChange(panelMat));
         }
-    })
+    }
+    if (changeSelected.Value){
+        for (let i = 0; i < Model.SelectionCount; i++){
+            let obj = Model.Selections[i];
+            //Если есть свойство MaterialName, значит добавляем материал
+            if (obj.MaterialName)
+                AddChange(<Panel>obj);
+        }
+    }
+    else{
+        Model.forEachPanel(AddChange);
+    }
     let pos = 0;
     const posIncrement = 30;        
     materialChanges.changes.forEach(change => {
@@ -131,15 +152,27 @@ let panels: PanelChange[] = [];
  * Вычисление будущих изменений
  */
 function Compute(){
-    materialChanges.ClearEmpty();
-    Model.forEachPanel(panel => {
+    function ComputePanel(panel: Panel){        
         let change = materialChanges.FindChange(panel.MaterialName);
         if (change) {
             let thicknessDiff = change.newMatThickness - panel.Thickness;
             panels.push(new PanelChange(panel, change.newMatName));
             transformer.AddPanelThicknessChange(panel, thicknessDiff);
         }
-    })
+    }
+
+    materialChanges.ClearEmpty();
+    if (changeSelected.Value){
+        for (let i = 0; i < Model.SelectionCount; i++){
+            let panel = Model.Selections[i].AsPanel;
+            if (panel){
+                ComputePanel(panel);
+            }
+        }
+    }
+    else{
+        Model.forEachPanel(ComputePanel)
+    }
     transformer.Compute(true);
 }
 
@@ -157,6 +190,8 @@ function Apply() {
     transformer.ClearChangesInfo();
 }
 
+FillForm();
+
 changeform.OnOkButtonClick = () => {
     Compute();
     Apply();
@@ -165,6 +200,8 @@ changeform.OnClose = ()=>{
     Action.Finish();
 }
 
-FillForm();
+changeSelected.OnChange = ()=>{
+    FillForm();
+}
 
 changeform.Show();

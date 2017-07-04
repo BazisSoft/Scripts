@@ -107,11 +107,18 @@ function FillForm() {
         }
     }
     if (changeSelected.Value){
-        for (let i = 0; i < Model.SelectionCount; i++){
-            let obj = Model.Selections[i];
-            //Если есть свойство MaterialName, значит добавляем материал
-            if (obj.MaterialName)
+        function CheckObject(obj: Object3){
+            if (obj.AsPanel)
                 AddChange(<Panel>obj);
+            else if (obj.List){
+                let list = obj.AsList();
+                for (let i = 0; i < list.Count; i++){
+                    CheckObject(list[i]);
+                }
+            }
+        }
+        for (let i = 0; i < Model.SelectionCount; i++){
+            CheckObject(Model.Selections[i]);
         }
     }
     else{
@@ -163,11 +170,22 @@ function Compute(){
 
     materialChanges.ClearEmpty();
     if (changeSelected.Value){
-        for (let i = 0; i < Model.SelectionCount; i++){
-            let panel = Model.Selections[i].AsPanel;
+
+        function ComputeObject(obj: Object3){
+            let panel = obj.AsPanel;
             if (panel){
                 ComputePanel(panel);
             }
+            else if (obj.List){
+                let list = obj.AsList();
+                for (let k = 0; k < list.Count; k++){
+                    ComputeObject(list[k]);
+                }
+            }
+        }
+
+        for (let i = 0; i < Model.SelectionCount; i++){
+            ComputeObject(Model.Selections[i]);
         }
     }
     else{
@@ -180,10 +198,12 @@ function Compute(){
  * Применение изменений и перестроение модели
  */
 function Apply() {
+    Model.UnSelectAll();
     panels.forEach(panelChange => {
         let panel = panelChange.panel;
         Undo.Changing(panel);
         panel.MaterialName = panelChange.newMatName;
+        panel.Selected = true;
     })
     transformer.Apply(Undo);
     Action.Commit();

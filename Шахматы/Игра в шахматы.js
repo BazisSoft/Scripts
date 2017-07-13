@@ -1,5 +1,5 @@
 Action.Hint = 'Загрузка игры...';
-system.require('chessengine.inc');
+system.include('chessengine.inc');
 
 modelboard = AddBlock('Доска');
 modelboard.Load('Доска.fr3d');

@@ -1,4 +1,4 @@
-system.require('ObjTree.js');
+system.include('ObjTree.js');
 
 Doc = {}
 Doc.Element = [];

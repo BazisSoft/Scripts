@@ -6,6 +6,9 @@ if (obj){
     let newFileName = system.askFileNameSave('b3d');
     if (newFileName){
         baz.saving.SaveObject(obj, newFileName);
-        Action.LoadModel(openedFile);
+        if (openedFile)
+            Action.LoadModel(openedFile);
+        else if (!baz.common.isOldApi())
+            Action.NewModel();
     }
 }

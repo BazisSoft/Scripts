@@ -5,7 +5,7 @@
   в следующем формате: текст, описывающий изменение функционала и код в формате
   файла определений TypeScript.
 2. Изменения в экспериментальном файле определений 
-  [experimentsl.d.ts](https://github.com/BazisSoft/vscode-bazis-debug/blob/master/experimental.d.ts) 
+  [experimental.d.ts](https://github.com/BazisSoft/vscode-bazis-debug/blob/master/experimental.d.ts) 
   (в расширении VSCode) здесь не описываются.
 
 ---
@@ -26,6 +26,37 @@
 ---
 
 ## <a name = "current">Текущие изменения</a>:
+Добавлено свойство артикула модели
+```ts
+interface FurnArticle{
+    Name: string
+    NameWithCode(): string;
+    Code: string;
+    FurnType: string;
+    Author: string;
+    Subject: string;
+    Enterprise: string;
+    Notes: string;
+    OrderCode: string;
+    OrderName: string;
+    DatumMode: DatumMode;
+}
+
+var Article: FurnArticle;
+```
+
+Добавлена функция расстановки позиций
+```ts
+enum TFurnPositionMode{
+    All = 0,
+    New = 1,
+    Check = 2
+}
+interface Action3D {
+    ArrangePositions(Mode: TFurnPositionMode, Model: List3D): boolean;
+}
+```
+
 Добавлены функции создания модели/фурнитуры/фрагмента и функция отмены изменений, сделанных в скрипте
 ```ts
  interface Action3D {

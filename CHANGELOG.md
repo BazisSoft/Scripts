@@ -26,6 +26,16 @@
 ---
 
 ## <a name = "current">Текущие изменения</a>:
+Добавлена функция поворота камеры
+```ts
+function OrientCamera(dir: Vector);
+```
+Добавлена функция замены фурнитуры
+```ts
+interface Action3D {
+    ReplaceFurniture(Old: string[], New: InfFurniture[], Fasteners: Object3[]);
+}
+```
 Добавлено свойство артикула модели
 ```ts
 interface FurnArticle{

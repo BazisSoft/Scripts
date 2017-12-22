@@ -4,4 +4,6 @@
 
 Описание: https://github.com/BazisSoft/Scripts/wiki
 
+Список изменений: [Changelog](CHANGELOG.md)
+
 Сайт программы: http://www.bazissoft.ru

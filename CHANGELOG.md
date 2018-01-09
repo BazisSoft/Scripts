@@ -57,7 +57,7 @@ var Article: FurnArticle;
 
 Добавлена функция расстановки позиций
 ```ts
-enum TFurnPositionMode{
+enum FurnPositionMode{
     All = 0,
     New = 1,
     Check = 2

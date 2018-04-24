@@ -12,6 +12,8 @@
 
 ## [Важные изменения](#important)
 
+## [Текущие изменения](#current)
+
 ## [Базис 10. Обновление. Январь 2018](#january2018)
 
 ## [Базис 10. Обновление. Июль 2017](#july2017)
@@ -24,6 +26,19 @@
 1. Базис 10. Обновление. Январь 2018 - [developerApiVersion и apiVersion](#devApi);
 2. Базис 10. Первый релиз. Июнь 2017 - [Схемы крепежа](#schemes);
 ---
+
+## <a name = "current">Текущие изменения</a>:
+Добавлена функция выбора материала из базы.
+```ts
+interface Action3D {
+    ChooseMaterial(): string;
+}
+```
+Добавлены функции для извлечения имени и кода материала из полного имени материала
+```ts
+function ExtractMatName(material: string): string;
+function ExtractMatCode(material: string): string;
+```
 
 ## <a name = "january2018">Базис 10. Обновление. Январь 2018</a>:
 Добавлена функция поворота камеры

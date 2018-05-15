@@ -28,6 +28,41 @@
 ---
 
 ## <a name = "current">Текущие изменения</a>:
+Обновлено автодополнение для 2D элемента:
+```ts
+
+interface Elem2D {
+    ElType: ElementType;
+    IsLine(): boolean;
+    AsLine(): Line2D;
+    IsCircle(): boolean;
+    AsCircle(): Circle2D;
+    IsEllipse(): boolean;
+    AsEllipse(): Ellipse2D;
+    IsArc(): boolean;
+    AsArc(): Arc2D;
+    IsList(): boolean;
+    AsList(): Contour2D;
+    ObjLength(): number;
+}
+```
+
+Обновлено автодополнение для объекта "кромка":
+```ts
+interface PanelButt {
+    ElemIndex: number;
+    Sign: string;
+    Material: string;
+    Thickness: number;
+    Width: number;
+    ClipPanel: boolean;
+    Overhung: number;
+    Allowance: number;
+    CutIndex: number;
+    Profile: Contour2D;
+}
+```
+
 Добавлена функция выбора материала из базы.
 ```ts
 interface Action3D {

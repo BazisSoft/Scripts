@@ -4,7 +4,6 @@
 Для редактирования и/или отладки скриптов через Visual Studio Code в модуле Базис-Мебельщик 2021 вам необходимо установить следующее программное обеспечение:
   * Базис-Мебельщик версии 2021 или выше
   * Visual Studio Code версии 1.53.0 или выше (последняя версия доступна по ссылке https://code.visualstudio.com/download). Работа на версии ниже 1.53.0 не гарантируется.
-  * [Microsoft .NET Framework 4.5.2](https://www.microsoft.com/ru-RU/download/details.aspx?id=42643)
 
 Для редактирования скриптов в Visual Studio Code необходимо:
   1. Установить все [Необходимые компоненты](#required_components) и [расширение `bazis-debug2`](#extension_installation)

@@ -1,2 +1,5 @@
-/experimental/*.js
+﻿/experimental/*.js
 /Примеры TypeScript/*.js
+*.js
+/out
+/node_modules
